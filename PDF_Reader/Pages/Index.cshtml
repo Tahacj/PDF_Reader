@@ -1,0 +1,14 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+</div>
+<form method="post" enctype="multipart/form-data">
+    <label for="fileUpload">Choose a file:</label>
+    <input id="fileUpload" name="fileUpload" type="file" />
+    <button type="submit" asp-page-handler="PdfText">Upload</button>
+</form>
