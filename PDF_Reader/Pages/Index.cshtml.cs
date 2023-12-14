@@ -29,25 +29,28 @@ namespace PDF_Reader.Pages
             if (fileUpload != null && fileUpload.Length > 0)
             {
                 // Get the file name
-                var fileName = System.IO.Path.GetFileName(fileUpload.FileName);
+                //var fileName = System.IO.Path.GetFileName(fileUpload.FileName);
 
-                // Get the path
-                var path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), fileName);
+                //// Get the path
+                //var path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), fileName);
 
+                using (Stream stream = fileUpload.OpenReadStream())
+                {
 
-                // Now you have the path, you can process it as needed
-                //string path = "file:///M:/taha_programing_file/C%23/PDF%20Reader/Test%20Files/11428111130.pdf";
-                PdfReader reader = new PdfReader(path);
-            string text = string.Empty;
+                    // Now you have the path, you can process it as needed
+                    //string path = "file:///M:/taha_programing_file/C%23/PDF%20Reader/Test%20Files/11428111130.pdf";
+                    PdfReader reader = new PdfReader(stream);
+                    string text = string.Empty;
 
-            for (int page = 1; page <= reader.NumberOfPages; page++)
-            {
-                text += PdfTextExtractor.GetTextFromPage(reader, page);
-            }
+                    for (int page = 1; page <= reader.NumberOfPages; page++)
+                    {
+                        text += PdfTextExtractor.GetTextFromPage(reader, page);
+                    }
 
-            Console.WriteLine(text);
+                    Console.WriteLine(text);
 
-            reader.Close();
+                    reader.Close();
+                }
             }
             return Page();
         }
