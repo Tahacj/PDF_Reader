@@ -58,9 +58,7 @@ namespace PDF_Reader.Pages
 
 		public void Button_Click(Stream file)
 		{
-			//TextBox txt = new TextBox();
 
-			//FileStream inputStream = new FileStream("M:/taha_programing_file/C%23/PDF%20Reader/Test%20Files/11428111130.pdf", FileMode.Open);
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(file);
 			// Get the first page of the loaded PDF document
 			PdfPageBase page = loadedDocument.Pages[0];
@@ -69,7 +67,6 @@ namespace PDF_Reader.Pages
 
 			Console.WriteLine("width " + page.Size.Width + "\n hight " + page.Size.Height);
             PdfGraphics graphics = page.Graphics;
-            //string outputPdfPath = "C:/Users/tahai/Desktop/temp";
 
 
             //under armor
@@ -128,15 +125,26 @@ namespace PDF_Reader.Pages
             //RectangleF priceBounds = new RectangleF(444, 246, 35, 210);
 
             //Pawakaddy
+            //RectangleF invoiceBounds = new RectangleF(128, 42, 57, 10);
+            //RectangleF costumerIdeBounds = new RectangleF(132, 79, 53, 10);
+            //RectangleF billToBounds = new RectangleF(40, 146, 155, 65);
+            //RectangleF shipToBounds = new RectangleF(264, 147, 155, 65);
+            //RectangleF shipDateBounds = new RectangleF(131, 56, 46, 10);
+            //RectangleF orderBounds = new RectangleF(319, 78, 60, 12);
+            //RectangleF qtyBounds = new RectangleF(405, 246, 27, 210);
+            //RectangleF productsBounds = new RectangleF(135, 300, 173, 330);//
+            //RectangleF priceBounds = new RectangleF(444, 246, 35, 210);
+
+            //MIZUNO
             RectangleF invoiceBounds = new RectangleF(128, 42, 57, 10);
-			RectangleF costumerIdeBounds = new RectangleF(132, 79, 53, 10);
-			RectangleF billToBounds = new RectangleF(40, 146, 155, 65);
-			RectangleF shipToBounds = new RectangleF(264, 147, 155, 65);
-			RectangleF shipDateBounds = new RectangleF(131, 56, 46, 10);
-			RectangleF orderBounds = new RectangleF(319, 78, 60, 12);
-			RectangleF qtyBounds = new RectangleF(405, 246, 27, 210);
-			RectangleF productsBounds = new RectangleF(135, 300, 173, 330);//
-			RectangleF priceBounds = new RectangleF(444, 246, 35, 210);
+            RectangleF costumerIdeBounds = new RectangleF(132, 79, 53, 10);
+            RectangleF billToBounds = new RectangleF(40, 146, 155, 65);
+            RectangleF shipToBounds = new RectangleF(264, 147, 155, 65);
+            RectangleF shipDateBounds = new RectangleF(131, 56, 46, 10);
+            RectangleF orderBounds = new RectangleF(319, 78, 60, 12);
+            RectangleF qtyBounds = new RectangleF(405, 246, 27, 210);
+            RectangleF productsBounds = new RectangleF(135, 300, 173, 330);//
+            RectangleF priceBounds = new RectangleF(444, 246, 35, 210);
 
             DrawRectangle(graphics, invoiceBounds, Color.Red);
             DrawRectangle(graphics, costumerIdeBounds, Color.Blue);
@@ -153,10 +161,6 @@ namespace PDF_Reader.Pages
                 loadedDocument.Save(outputFileStream);
             }
 
-            //FileStream outFile = new FileStream(outputPdfPath, FileMode.Create) ;
-            //loadedDocument.Save(outFile);
-            //loadedDocument.Close(true);
-            //pdfViewer.DocumentPath = outputPdfPath;
 
 
             string invoiceNumer = "";
