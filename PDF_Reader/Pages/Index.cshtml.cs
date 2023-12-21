@@ -66,7 +66,7 @@ namespace PDF_Reader.Pages
 			// Extract text from the first page with bounds
 			page.ExtractText(out TextLineCollection lineCollection);
 
-			Console.WriteLine("width " + page.Size.Width + "\n hight " + page.Size.Height);
+			Console.WriteLine("width " + page.Size.Width + "\nhight " + page.Size.Height);
             PdfGraphics graphics = page.Graphics;
 
 
@@ -250,21 +250,21 @@ namespace PDF_Reader.Pages
 
 			string data = "";
 
-			data = "-Invoice Number: " + invoiceNumer;
-            data += "\n\n-Costumer ID: " + costumerId;
-            data += "\n\n-Bill To: " + billTo;
-            data += "\n\n-Ship To: " + shipTo;
-            data += "\n\n-Ship Date: " + shipDate;
-			data += "\n\n-Order: " + order;
+			data = "Invoice Number: " + invoiceNumer;
+            data += "\n\nCostumer ID: " + costumerId;
+            data += "\n\nBill To: " + billTo;
+            data += "\n\nShip To: " + shipTo;
+            data += "\n\nShip Date: " + shipDate;
+			data += "\n\nOrder: " + order;
 			data += "\n\n------------\nQTY:";
 			foreach (var qty in quantities)
-				data += "\n\n-" + qty;
+				data += "\n\n" + qty;
 			data += "\n\n------------\nProducts:";
 			foreach (var p in products)
-				data += "\n\n-" + p;
+				data += "\n\n" + p;
 			data += "\n\n------------\nPrices:";
 			foreach (var p in prices)
-				data += "\n\n-" + p;
+				data += "\n\n" + p;
 
             Console.WriteLine(data);
 		}
