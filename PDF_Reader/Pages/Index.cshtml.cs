@@ -75,8 +75,8 @@ namespace PDF_Reader.Pages
             //RectangleF costumerIdeBounds = new RectangleF(485, 35, 75, 10);
             //RectangleF billToBounds = new RectangleF(68, 190, 120, 35);
             //RectangleF shipToBounds = new RectangleF(360, 190, 150, 60);
-            //RectangleF shipDateBounds = new RectangleF(378, 304, 70, 15);
-            //RectangleF orderBounds = new RectangleF(512, 275, 82, 12);
+            //RectangleF shipDateBounds = new RectangleF(306, 298, 143, 15);
+            //RectangleF orderBounds = new RectangleF(450, 270, 144, 12);
             //RectangleF qtyBounds = new RectangleF(21, 330, 30, 200);
             //RectangleF productsBounds = new RectangleF(162, 330, 80, 200);
             //RectangleF priceBounds = new RectangleF(404, 330, 42, 200);
@@ -84,13 +84,13 @@ namespace PDF_Reader.Pages
             //skechers // test this is not working ritght
             //RectangleF invoiceBounds = new RectangleF(450, 130, 100, 13);
             //RectangleF costumerIdeBounds = new RectangleF(15, 240, 50, 15);
-            //RectangleF billToBounds = new RectangleF(117, 152, 225, 62);
+            //RectangleF billToBounds = new RectangleF(66, 152, 225, 62);
             //RectangleF shipToBounds = new RectangleF(330, 150, 225, 62);
-            //RectangleF shipDateBounds = new RectangleF(378, 304, 70, 15); //
-            //RectangleF orderBounds = new RectangleF(315, 270, 105, 13);
-            //RectangleF qtyBounds = new RectangleF(406, 329, 30, 425); 
-            //RectangleF productsBounds = new RectangleF(162, 330, 80, 200); //
-            //RectangleF priceBounds = new RectangleF(435, 332, 55, 425);
+            //RectangleF shipDateBounds = new RectangleF(339, 130, 106, 13); 
+            //RectangleF orderBounds = new RectangleF(208, 270, 105, 13);
+            //RectangleF qtyBounds = new RectangleF(406, 350, 30, 400);
+            //RectangleF productsBounds = new RectangleF(12, 346, 48, 400);
+            //RectangleF priceBounds = new RectangleF(440, 350, 55, 400);
 
             //Taylor made
             //RectangleF invoiceBounds = new RectangleF(260, 106, 60, 15);
@@ -100,30 +100,99 @@ namespace PDF_Reader.Pages
             //RectangleF shipDateBounds = new RectangleF(335, 275, 60, 23);
             //RectangleF orderBounds = new RectangleF(36, 275, 50, 20);
             //RectangleF qtyBounds = new RectangleF(188, 335, 25, 250);
-            //RectangleF productsBounds = new RectangleF(75, 335, 102, 250);
+            //RectangleF productsBounds = new RectangleF(35, 335, 40, 250);
             //RectangleF priceBounds = new RectangleF(300, 335, 46, 250);
 
             //Callaway
-            RectangleF invoiceBounds = new RectangleF(21, 219, 60, 10); //
-            RectangleF costumerIdeBounds = new RectangleF(21, 244, 65, 10); //
-            RectangleF billToBounds = new RectangleF(53, 128, 200, 80);
-            RectangleF shipToBounds = new RectangleF(50, 30, 185, 83);
-            RectangleF shipDateBounds = new RectangleF(171, 220, 50, 10);
-            RectangleF orderBounds = new RectangleF(147, 244, 67, 10);
-            RectangleF qtyBounds = new RectangleF(350, 300, 25, 330);
-            RectangleF productsBounds = new RectangleF(135, 300, 173, 330);
-            RectangleF priceBounds = new RectangleF(390, 300, 35, 330);
+            //RectangleF invoiceBounds = new RectangleF(21, 219, 60, 10); //
+            //RectangleF costumerIdeBounds = new RectangleF(21, 244, 65, 10); //
+            //RectangleF billToBounds = new RectangleF(51, 125, 182, 80);
+            //RectangleF shipToBounds = new RectangleF(50, 30, 185, 83);
+            //RectangleF shipDateBounds = new RectangleF(171, 220, 50, 10);
+            //RectangleF orderBounds = new RectangleF(147, 244, 67, 10);
+            //RectangleF qtyBounds = new RectangleF(330, 271, 25, 350);
+            //RectangleF productsBounds = new RectangleF(16, 271, 25, 350);
+            //RectangleF priceBounds = new RectangleF(390, 271, 40, 350);
 
             //Pawakaddy
-            //RectangleF invoiceBounds = new RectangleF(128, 42, 57, 10);
-            //RectangleF costumerIdeBounds = new RectangleF(132, 79, 53, 10);
-            //RectangleF billToBounds = new RectangleF(40, 146, 155, 65);
-            //RectangleF shipToBounds = new RectangleF(264, 147, 155, 65);
-            //RectangleF shipDateBounds = new RectangleF(131, 56, 46, 10);
-            //RectangleF orderBounds = new RectangleF(319, 78, 60, 12);
-            //RectangleF qtyBounds = new RectangleF(405, 246, 27, 210);
-            //RectangleF productsBounds = new RectangleF(11, 246, 77, 210);
-            //RectangleF priceBounds = new RectangleF(444, 246, 35, 210);
+            //float stratPosX = lineCollection.TextLine[9].Bounds.Location.X;
+            //float stratPosY = lineCollection.TextLine[9].Bounds.Location.Y;
+            //RectangleF invoiceBounds = new RectangleF(107 + stratPosX, 16 + stratPosY, 57, 10);
+            //RectangleF costumerIdeBounds = new RectangleF(107 + stratPosX, 53 + stratPosY, 53, 10);
+            //RectangleF billToBounds = new RectangleF(20 + stratPosX, 120 + stratPosY, 155, 65);
+            //RectangleF shipToBounds = new RectangleF(244 + stratPosX, 120 + stratPosY, 155, 65);
+            //RectangleF shipDateBounds = new RectangleF(111 + stratPosX, 30 + stratPosY, 46, 10);
+            //RectangleF orderBounds = new RectangleF(300 + stratPosX, 52 + stratPosY, 60, 12);
+            //RectangleF qtyBounds = new RectangleF(385 + stratPosX, 220 + stratPosY, 27, 210);
+            //RectangleF productsBounds = new RectangleF(-9 + stratPosX, 220 + stratPosY, 77, 210);
+            //RectangleF priceBounds = new RectangleF(424 + stratPosX, 220 + stratPosY, 35, 210);
+
+            //Mizuno
+            //RectangleF invoiceBounds = new RectangleF(522, 113, 66, 20);
+            //RectangleF costumerIdeBounds = new RectangleF(77, 124, 42, 12);
+            //RectangleF billToBounds = new RectangleF(18, 137, 177, 91);
+            //RectangleF shipToBounds = new RectangleF(267, 137, 182, 94);
+            //RectangleF shipDateBounds = new RectangleF(520, 196, 64, 16);
+            //RectangleF orderBounds = new RectangleF(70, 304, 42, 10);
+            //RectangleF qtyBounds = new RectangleF(430, 294, 28, 335);
+            //RectangleF productsBounds = new RectangleF(12, 294, 55, 335);
+            //RectangleF priceBounds = new RectangleF(465, 294, 40, 335);
+
+            //Cobra Puma
+            //RectangleF invoiceBounds = new RectangleF(27, 302, 136, 13);
+            //RectangleF costumerIdeBounds = new RectangleF(27, 270, 136, 13);
+            //RectangleF billToBounds = new RectangleF(84, 105, 180, 93);
+            //RectangleF shipToBounds = new RectangleF(386, 164, 149, 81);
+            //RectangleF shipDateBounds = new RectangleF(178, 270, 118, 14);
+            //RectangleF orderBounds = new RectangleF(311, 270, 133, 13);
+            //RectangleF qtyBounds = new RectangleF(310, 338, 28, 320);
+            //RectangleF productsBounds = new RectangleF(25, 338, 55, 320);
+            //RectangleF priceBounds = new RectangleF(343, 338, 54, 320);
+
+            //Fitleist
+            //RectangleF invoiceBounds = new RectangleF(200, 225, 60, 10);
+            //RectangleF costumerIdeBounds = new RectangleF(320, 225, 41, 10);
+            //RectangleF billToBounds = new RectangleF(60, 115, 183, 76);
+            //RectangleF shipToBounds = new RectangleF(330, 115, 175, 76);
+            //RectangleF shipDateBounds = new RectangleF(495, 225, 53, 10);
+            //RectangleF orderBounds = new RectangleF(440, 225, 56, 10);
+            //RectangleF qtyBounds = new RectangleF(415, 280, 23, 380);
+            //RectangleF productsBounds = new RectangleF(5, 280, 68, 380);
+            //RectangleF priceBounds = new RectangleF(442, 281, 41, 380);
+
+            //MOTOCADDY
+            //RectangleF invoiceBounds = new RectangleF(430, 89, 52, 12);
+            //RectangleF costumerIdeBounds = new RectangleF(427, 110, 43, 13);
+            //RectangleF billToBounds = new RectangleF(46, 179, 126, 70);
+            //RectangleF shipToBounds = new RectangleF(50, 273, 125, 68);
+            //RectangleF shipDateBounds = new RectangleF(428, 180, 53, 14);
+            //RectangleF orderBounds = new RectangleF(495, 208, 56, 11);
+            //RectangleF qtyBounds = new RectangleF(63, 354, 36, 34);
+            //RectangleF productsBounds = new RectangleF(476, 354, 52, 34);
+            //RectangleF priceBounds = new RectangleF(297, 353, 32, 36);
+
+            //MASTERS217
+            //RectangleF invoiceBounds = new RectangleF(250, 18, 75, 20);
+            //RectangleF costumerIdeBounds = new RectangleF(276, 65, 56, 16);
+            //RectangleF billToBounds = new RectangleF(8, 39, 164, 77);
+            //RectangleF shipToBounds = new RectangleF(5, 135, 170, 75);
+            //RectangleF shipDateBounds = new RectangleF(275, 76, 72, 17);
+            //RectangleF orderBounds = new RectangleF(276, 93, 80, 14);
+            //RectangleF qtyBounds = new RectangleF(383, 231, 44, 480);
+            //RectangleF productsBounds = new RectangleF(5, 232, 63, 471);
+            //RectangleF priceBounds = new RectangleF(469, 233, 36, 476);
+
+            //ClevelandGolf
+            RectangleF invoiceBounds = new RectangleF(486, 311, 52, 17);
+            RectangleF costumerIdeBounds = new RectangleF(24, 354, 45, 10);
+            RectangleF billToBounds = new RectangleF(35, 156, 195, 84);
+            RectangleF shipToBounds = new RectangleF(368, 154, 195, 87);
+            RectangleF shipDateBounds = new RectangleF(416, 311, 49, 16);
+            RectangleF orderBounds = new RectangleF(32, 452, 50, 18);
+            RectangleF qtyBounds = new RectangleF(248, 397, 42, 43);//
+            RectangleF productsBounds = new RectangleF(28, 398, 64, 39);//
+            RectangleF priceBounds = new RectangleF(297, 396, 33, 44);//
+
 
 
             DrawRectangle(graphics, invoiceBounds, Color.Red);
