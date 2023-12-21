@@ -10,6 +10,7 @@ using Syncfusion.Drawing;
 using System;
 using System.IO;
 using Syncfusion.Pdf.Graphics;
+using Syncfusion.Pdf.Interactive;
 
 
 namespace PDF_Reader.Pages
@@ -52,8 +53,8 @@ namespace PDF_Reader.Pages
 					//reader.Close();
 				}
 			}
-			return Page();
-		}
+            return File(new FileStream("modified.pdf", FileMode.Open), "application/pdf", "modified.pdf");
+        }
 
 		public void Button_Click(Stream file)
 		{
@@ -68,7 +69,7 @@ namespace PDF_Reader.Pages
 
 			Console.WriteLine("width " + page.Size.Width + "\n hight " + page.Size.Height);
             PdfGraphics graphics = page.Graphics;
-            string outputPdfPath = "C:/Users/tahai/Desktop/temp";
+            //string outputPdfPath = "C:/Users/tahai/Desktop/temp";
 
 
             //under armor
@@ -147,9 +148,14 @@ namespace PDF_Reader.Pages
             DrawRectangle(graphics, productsBounds, Color.Olive);
             DrawRectangle(graphics, priceBounds, Color.Purple);
 
-            FileStream outFile = new FileStream(outputPdfPath, FileMode.Create) ;
-            loadedDocument.Save(outFile);
-            loadedDocument.Close(true);
+            using (FileStream outputFileStream = new FileStream("modified.pdf", FileMode.Create))
+            {
+                loadedDocument.Save(outputFileStream);
+            }
+
+            //FileStream outFile = new FileStream(outputPdfPath, FileMode.Create) ;
+            //loadedDocument.Save(outFile);
+            //loadedDocument.Close(true);
             //pdfViewer.DocumentPath = outputPdfPath;
 
 
