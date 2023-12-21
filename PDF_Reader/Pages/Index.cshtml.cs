@@ -31,10 +31,10 @@ namespace PDF_Reader.Pages
 
 		public IActionResult OnPostPdfText(IFormFile fileUpload)
 		{
+            string fileName= "";
 			if (fileUpload != null && fileUpload.Length > 0)
 			{
-				
-                string fileName= fileUpload.FileName;
+				fileName = fileUpload.FileName;
 				using (Stream stream = fileUpload.OpenReadStream())
 				{
 					Button_Click(stream , fileName);
@@ -51,12 +51,13 @@ namespace PDF_Reader.Pages
 					//Console.WriteLine(text);
 
 					//reader.Close();
+                    return File(new FileStream($"{fileName}-modified.pdf", FileMode.Open), "application/pdf", $"{fileName}-modified.pdf");
 				}
 			}
-            return File(new FileStream("modified.pdf", FileMode.Open), "application/pdf", "modified.pdf");
+            return Page();
         }
 
-		public void Button_Click(Stream file , string filename)
+        public void Button_Click(Stream file , string filename)
 		{
 
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(file);
@@ -135,7 +136,7 @@ namespace PDF_Reader.Pages
             DrawRectangle(graphics, productsBounds, Color.Olive);
             DrawRectangle(graphics, priceBounds, Color.Purple);
 
-            using (FileStream outputFileStream = new FileStream(filename + "-modified.pdf", FileMode.Create))
+            using (FileStream outputFileStream = new FileStream($"{filename}-modified.pdf", FileMode.Create))
             {
                 loadedDocument.Save(outputFileStream);
             }
