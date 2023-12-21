@@ -4,11 +4,22 @@
     ViewData["Title"] = "Home page";
 }
 
+
+<head runat="server">
+    <link rel="stylesheet" type="text/css" href="https://cdn.syncfusion.com/ej2/19.2.57/material.css" />
+    <script src="https://cdn.syncfusion.com/ej2/19.2.57/dist/ej2.min.js"></script>
+</head>
+
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
 </div>
-<form method="post" enctype="multipart/form-data">
-    <label for="fileUpload">Choose a file:</label>
-    <input id="fileUpload" name="fileUpload" type="file" />
-    <button type="submit" asp-page-handler="PdfText">Upload</button>
-</form>
+<body>
+    <form method="post" enctype="multipart/form-data">
+        <label for="fileUpload">Choose a file:</label>
+        <input id="fileUpload" name="fileUpload" type="file" />
+        <button type="submit" asp-page-handler="PdfText">Upload</button>
+    </form>
+    <form id="form1" runat="server">
+        <ej-pdfviewer id="pdfViewer" runat="server" height="800px" width="100%" document-path="C:/Users/tahai/Desktop/temp/AnnotatedDocument.pdf"></ej-pdfviewer>
+    </form>
+</body>
