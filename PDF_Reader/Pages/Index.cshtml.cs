@@ -194,7 +194,6 @@ namespace PDF_Reader.Pages
             RectangleF priceBounds = new RectangleF(297, 396, 33, 44);//
 
 
-
             DrawRectangle(graphics, invoiceBounds, Color.Red);
             DrawRectangle(graphics, costumerIdeBounds, Color.Blue);
             DrawRectangle(graphics, billToBounds, Color.Green);
