@@ -19,58 +19,58 @@ namespace PDF_Reader.Pages
     {
         private readonly ILogger<IndexModel> _logger;
 
-		public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
         }
 
         public void OnGet()
-		{
+        {
 
-		}
+        }
 
-		public IActionResult OnPostPdfText(IFormFile fileUpload)
-		{
-            string fileName= "";
-			if (fileUpload != null && fileUpload.Length > 0)
-			{
-				fileName = fileUpload.FileName;
-				using (Stream stream = fileUpload.OpenReadStream())
-				{
-					Button_Click(stream , fileName);
-					// Now you have the path, you can process it as needed
-					//string path = "file:///M:/taha_programing_file/C%23/PDF%20Reader/Test%20Files/11428111130.pdf";
-					//PdfReader reader = new PdfReader(stream);
-					//string text = string.Empty;
+        public IActionResult OnPostPdfText(IFormFile fileUpload)
+        {
+            string fileName = "";
+            if (fileUpload != null && fileUpload.Length > 0)
+            {
+                fileName = fileUpload.FileName;
+                using (Stream stream = fileUpload.OpenReadStream())
+                {
+                    Button_Click(stream, fileName);
+                    // Now you have the path, you can process it as needed
+                    //string path = "file:///M:/taha_programing_file/C%23/PDF%20Reader/Test%20Files/11428111130.pdf";
+                    //PdfReader reader = new PdfReader(stream);
+                    //string text = string.Empty;
 
-					//for (int page = 1; page <= reader.NumberOfPages; page++)
-					//{
-					//	text += PdfTextExtractor.GetTextFromPage(reader, page);
-					//}
+                    //for (int page = 1; page <= reader.NumberOfPages; page++)
+                    //{
+                    //	text += PdfTextExtractor.GetTextFromPage(reader, page);
+                    //}
 
-					//Console.WriteLine(text);
+                    //Console.WriteLine(text);
 
-					//reader.Close();
+                    //reader.Close();
                     return File(new FileStream($"{fileName}-modified.pdf", FileMode.Open), "application/pdf", $"{fileName}-modified.pdf");
-				}
-			}
+                }
+            }
             return Page();
         }
 
-        public void Button_Click(Stream file , string filename)
-		{
+        public void Button_Click(Stream file, string filename)
+        {
 
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(file);
-			// Get the first page of the loaded PDF document
-			PdfPageBase page = loadedDocument.Pages[0];
-			// Extract text from the first page with bounds
-			page.ExtractText(out TextLineCollection lineCollection);
+            // Get the first page of the loaded PDF document
+            PdfPageBase page = loadedDocument.Pages[0];
+            // Extract text from the first page with bounds
+            page.ExtractText(out TextLineCollection lineCollection);
 
-			Console.WriteLine("width " + page.Size.Width + "\nhight " + page.Size.Height);
+            Console.WriteLine("width " + page.Size.Width + "\n hight " + page.Size.Height);
             PdfGraphics graphics = page.Graphics;
 
 
-            //under armor
+            ////under armor
             //RectangleF invoiceBounds = new RectangleF(485, 24, 60, 10);
             //RectangleF costumerIdeBounds = new RectangleF(485, 35, 75, 10);
             //RectangleF billToBounds = new RectangleF(68, 190, 120, 35);
@@ -80,19 +80,23 @@ namespace PDF_Reader.Pages
             //RectangleF qtyBounds = new RectangleF(21, 330, 30, 200);
             //RectangleF productsBounds = new RectangleF(162, 330, 80, 200);
             //RectangleF priceBounds = new RectangleF(404, 330, 42, 200);
+            //RectangleF netPriceBounds = new RectangleF(551, 331, 44, 238);
+            //RectangleF totalNetPriceBounds = new RectangleF(533, 579, 60, 12);
 
-            //skechers // test this is not working ritght
+            ////skechers // test this is not working ritght
             //RectangleF invoiceBounds = new RectangleF(450, 130, 100, 13);
             //RectangleF costumerIdeBounds = new RectangleF(15, 240, 50, 15);
             //RectangleF billToBounds = new RectangleF(66, 152, 225, 62);
             //RectangleF shipToBounds = new RectangleF(330, 150, 225, 62);
-            //RectangleF shipDateBounds = new RectangleF(339, 130, 106, 13); 
+            //RectangleF shipDateBounds = new RectangleF(339, 130, 106, 13);
             //RectangleF orderBounds = new RectangleF(208, 270, 105, 13);
             //RectangleF qtyBounds = new RectangleF(406, 350, 30, 400);
             //RectangleF productsBounds = new RectangleF(12, 346, 48, 400);
             //RectangleF priceBounds = new RectangleF(440, 350, 55, 400);
+            //RectangleF netPriceBounds = new RectangleF(496, 330, 91, 429);
+            //RectangleF totalNetPriceBounds = new RectangleF(503, 761, 87, 10);
 
-            //Taylor made
+            ////Taylor made
             //RectangleF invoiceBounds = new RectangleF(260, 106, 60, 15);
             //RectangleF costumerIdeBounds = new RectangleF(120, 140, 60, 10);
             //RectangleF billToBounds = new RectangleF(36, 150, 190, 85);
@@ -102,17 +106,21 @@ namespace PDF_Reader.Pages
             //RectangleF qtyBounds = new RectangleF(188, 335, 25, 250);
             //RectangleF productsBounds = new RectangleF(35, 335, 40, 250);
             //RectangleF priceBounds = new RectangleF(300, 335, 46, 250);
+            //RectangleF netPriceBounds = new RectangleF(485, 338, 50, 264);
+            //RectangleF totalNetPriceBounds = new RectangleF(290, 637, 69, 20);
 
             //Callaway
-            //RectangleF invoiceBounds = new RectangleF(21, 219, 60, 10); //
-            //RectangleF costumerIdeBounds = new RectangleF(21, 244, 65, 10); //
-            //RectangleF billToBounds = new RectangleF(51, 125, 182, 80);
-            //RectangleF shipToBounds = new RectangleF(50, 30, 185, 83);
-            //RectangleF shipDateBounds = new RectangleF(171, 220, 50, 10);
-            //RectangleF orderBounds = new RectangleF(147, 244, 67, 10);
-            //RectangleF qtyBounds = new RectangleF(330, 271, 25, 350);
-            //RectangleF productsBounds = new RectangleF(16, 271, 25, 350);
-            //RectangleF priceBounds = new RectangleF(390, 271, 40, 350);
+            RectangleF invoiceBounds = new RectangleF(21, 219, 60, 10); //
+            RectangleF costumerIdeBounds = new RectangleF(21, 244, 65, 10); //
+            RectangleF billToBounds = new RectangleF(51, 125, 182, 80);
+            RectangleF shipToBounds = new RectangleF(50, 30, 185, 83);
+            RectangleF shipDateBounds = new RectangleF(171, 220, 50, 10);
+            RectangleF orderBounds = new RectangleF(147, 244, 67, 10);
+            RectangleF qtyBounds = new RectangleF(330, 271, 25, 350);
+            RectangleF productsBounds = new RectangleF(16, 271, 25, 350);
+            RectangleF priceBounds = new RectangleF(390, 271, 40, 350);
+            RectangleF netPriceBounds = new RectangleF(516, 266, 55, 379);
+            RectangleF totalNetPriceBounds = new RectangleF(516, 648, 54, 12);
 
             //Pawakaddy
             //float stratPosX = lineCollection.TextLine[9].Bounds.Location.X;
@@ -182,16 +190,16 @@ namespace PDF_Reader.Pages
             //RectangleF productsBounds = new RectangleF(5, 232, 63, 471);
             //RectangleF priceBounds = new RectangleF(469, 233, 36, 476);
 
-            //ClevelandGolf
-            RectangleF invoiceBounds = new RectangleF(486, 311, 52, 17);
-            RectangleF costumerIdeBounds = new RectangleF(24, 354, 45, 10);
-            RectangleF billToBounds = new RectangleF(35, 156, 195, 84);
-            RectangleF shipToBounds = new RectangleF(368, 154, 195, 87);
-            RectangleF shipDateBounds = new RectangleF(416, 311, 49, 16);
-            RectangleF orderBounds = new RectangleF(32, 452, 50, 18);
-            RectangleF qtyBounds = new RectangleF(248, 397, 42, 43);//
-            RectangleF productsBounds = new RectangleF(28, 398, 64, 39);//
-            RectangleF priceBounds = new RectangleF(297, 396, 33, 44);//
+            ////ClevelandGolf
+            //RectangleF invoiceBounds = new RectangleF(486, 311, 52, 17);
+            //RectangleF costumerIdeBounds = new RectangleF(24, 354, 45, 10);
+            //RectangleF billToBounds = new RectangleF(35, 156, 195, 84);
+            //RectangleF shipToBounds = new RectangleF(368, 154, 195, 87);
+            //RectangleF shipDateBounds = new RectangleF(416, 311, 49, 16);
+            //RectangleF orderBounds = new RectangleF(32, 452, 50, 18);
+            //RectangleF qtyBounds = new RectangleF(248, 397, 42, 43);//
+            //RectangleF productsBounds = new RectangleF(28, 398, 64, 39);//
+            //RectangleF priceBounds = new RectangleF(297, 396, 33, 44);
 
 
             DrawRectangle(graphics, invoiceBounds, Color.Red);
@@ -203,6 +211,8 @@ namespace PDF_Reader.Pages
             DrawRectangle(graphics, qtyBounds, Color.Orange);
             DrawRectangle(graphics, productsBounds, Color.Olive);
             DrawRectangle(graphics, priceBounds, Color.Purple);
+            DrawRectangle(graphics, netPriceBounds, Color.Black);
+            DrawRectangle(graphics, totalNetPriceBounds, Color.Black);
 
             using (FileStream outputFileStream = new FileStream($"{filename}-modified.pdf", FileMode.Create))
             {
@@ -212,21 +222,23 @@ namespace PDF_Reader.Pages
 
 
             string invoiceNumer = "";
-			string costumerId = "";
-			string billTo = "";
-			string shipTo = "";
+            string costumerId = "";
+            string billTo = "";
+            string shipTo = "";
             string shipDate = "";
-			string order = "";
+            string order = "";
             var quantities = new List<string>();
-			var products = new List<string>();
-			var prices = new List<string>();
-			//Get the text provided in the bounds
-			foreach (var txtLine in lineCollection.TextLine)
-			{
-				foreach (TextWord word in txtLine.WordCollection)
-				{
-					if (IsIntersected(invoiceBounds, word.Bounds))
-						invoiceNumer = word.Text;
+            var products = new List<string>();
+            var prices = new List<string>();
+            var netPrices = new List<string>();
+            string totalNetPrice = "";
+            //Get the text provided in the bounds
+            foreach (var txtLine in lineCollection.TextLine)
+            {
+                foreach (TextWord word in txtLine.WordCollection)
+                {
+                    if (IsIntersected(invoiceBounds, word.Bounds))
+                        invoiceNumer = word.Text;
                     if (IsIntersected(costumerIdeBounds, word.Bounds))
                         costumerId = word.Text;
                     if (IsIntersected(billToBounds, word.Bounds))
@@ -234,54 +246,88 @@ namespace PDF_Reader.Pages
                     if (IsIntersected(shipToBounds, word.Bounds))
                         shipTo += word.Text;
                     if (IsIntersected(shipDateBounds, word.Bounds))
-						shipDate += word.Text;
-					if (IsIntersected(orderBounds, word.Bounds))
-						order += word.Text;
-					if (IsIntersected(qtyBounds, word.Bounds))
-						quantities.Add(word.Text);
-					if (IsIntersected(productsBounds, word.Bounds))
-						products.Add(word.Text);
-					if (IsIntersected(priceBounds, word.Bounds))
-						prices.Add(word.Text);
-				}
-			}
-			loadedDocument.Close(true);
+                        shipDate += word.Text;
+                    if (IsIntersected(orderBounds, word.Bounds))
+                        order += word.Text;
+                    if (IsIntersected(qtyBounds, word.Bounds))
+                        quantities.Add(word.Text);
+                    if (IsIntersected(productsBounds, word.Bounds))
+                        products.Add(word.Text);
+                    if (IsIntersected(priceBounds, word.Bounds))
+                        prices.Add(word.Text);
+                    if (IsIntersected(netPriceBounds, word.Bounds))
+                        netPrices.Add(word.Text);
+                    if (IsIntersected(totalNetPriceBounds, word.Bounds))
+                        totalNetPrice += word.Text;
+                }
+            }
+            loadedDocument.Close(true);
 
-			string data = "";
+            string data = "";
 
-			data = "Invoice Number: " + invoiceNumer;
-            data += "\n\nCostumer ID: " + costumerId;
-            data += "\n\nBill To: " + billTo;
-            data += "\n\nShip To: " + shipTo;
-            data += "\n\nShip Date: " + shipDate;
-			data += "\n\nOrder: " + order;
-			data += "\n\n------------\nQTY:";
-			foreach (var qty in quantities)
-				data += "\n\n" + qty;
-			data += "\n\n------------\nProducts:";
-			foreach (var p in products)
-				data += "\n\n" + p;
-			data += "\n\n------------\nPrices:";
-			foreach (var p in prices)
-				data += "\n\n" + p;
-
+            data = "-Invoice Number: " + invoiceNumer;
+            data += "\n\n-Costumer ID: " + costumerId;
+            data += "\n\n-Bill To: " + billTo;
+            data += "\n\n-Ship To: " + shipTo;
+            data += "\n\n-Ship Date: " + shipDate;
+            data += "\n\n-Order: " + order;
+            data += "\n\n-Total Net Price: " + totalNetPrice;
+            data += "\n\n------------\nQTY:";
+            foreach (var qty in quantities)
+                data += "\n\n-" + qty;
+            data += "\n\n------------\nProducts:";
+            foreach (var p in products)
+                data += "\n\n-" + p;
+            data += "\n\n------------\nPrices:";
+            foreach (var p in prices)
+                data += "\n\n-" + p;
+            data += "\n\n------------\nNet Prices:";
+            foreach (var net in netPrices)
+                data += "\n\n-" + net;
             Console.WriteLine(data);
-		}
+            Validate(quantities, netPrices, totalNetPrice);
+        }
 
-		internal bool IsIntersected(RectangleF rect1, RectangleF rect2)
-		{
-			if (rect2.X < rect1.X + rect1.Width && rect1.X < rect2.X + rect2.Width && rect2.Y < rect1.Y + rect1.Height)
-			{
-				return rect1.Y < rect2.Y + rect2.Height;
-			}
+        internal bool IsIntersected(RectangleF rect1, RectangleF rect2)
+        {
+            if (rect2.X < rect1.X + rect1.Width && rect1.X < rect2.X + rect2.Width && rect2.Y < rect1.Y + rect1.Height)
+            {
+                return rect1.Y < rect2.Y + rect2.Height;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
         private void DrawRectangle(PdfGraphics graphics, RectangleF bounds, Color color)
         {
             PdfPen pen = new PdfPen(new PdfColor(color), 2f);
             graphics.DrawRectangle(pen, bounds);
+        }
+        private void Validate(List<string> QTY, List<string> Price, string totalNet)
+        {
+            float total = 0;
+            if (Price.LongCount() > 0)
+            {
+
+                for (int i = 0; i < Price.LongCount(); i++)
+                {
+                    if (!string.IsNullOrWhiteSpace(Price[i]))
+                    {
+                        total += (float.Parse(Price[i].Trim()));
+
+                    }
+                }
+                if (float.Parse(totalNet.Trim()) == total)
+                {
+                    Console.WriteLine("\n\n VALID \n\n");
+                }
+                else
+                {
+                    Console.WriteLine("\n\nNOT ACCEPTABLE\n\n");
+                }
+            }
+            Console.WriteLine("TOTAL IS EQUAL TO :" + total);
+
         }
     }
 }
