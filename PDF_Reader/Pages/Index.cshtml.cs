@@ -70,7 +70,7 @@ namespace PDF_Reader.Pages
             PdfGraphics graphics = page.Graphics;
 
 
-            ////under armor
+            //under armor
             //RectangleF invoiceBounds = new RectangleF(485, 24, 60, 10);
             //RectangleF costumerIdeBounds = new RectangleF(485, 35, 75, 10);
             //RectangleF billToBounds = new RectangleF(68, 190, 120, 35);
@@ -83,7 +83,7 @@ namespace PDF_Reader.Pages
             //RectangleF netPriceBounds = new RectangleF(551, 331, 44, 238);
             //RectangleF totalNetPriceBounds = new RectangleF(533, 579, 60, 12);
 
-            ////skechers // test this is not working ritght
+            //skechers // test this is not working ritght
             //RectangleF invoiceBounds = new RectangleF(450, 130, 100, 13);
             //RectangleF costumerIdeBounds = new RectangleF(15, 240, 50, 15);
             //RectangleF billToBounds = new RectangleF(66, 152, 225, 62);
@@ -96,7 +96,7 @@ namespace PDF_Reader.Pages
             //RectangleF netPriceBounds = new RectangleF(496, 330, 91, 429);
             //RectangleF totalNetPriceBounds = new RectangleF(503, 761, 87, 10);
 
-            ////Taylor made
+            //Taylor made
             //RectangleF invoiceBounds = new RectangleF(260, 106, 60, 15);
             //RectangleF costumerIdeBounds = new RectangleF(120, 140, 60, 10);
             //RectangleF billToBounds = new RectangleF(36, 150, 190, 85);
@@ -190,7 +190,7 @@ namespace PDF_Reader.Pages
             //RectangleF productsBounds = new RectangleF(5, 232, 63, 471);
             //RectangleF priceBounds = new RectangleF(469, 233, 36, 476);
 
-            ////ClevelandGolf
+            //ClevelandGolf
             //RectangleF invoiceBounds = new RectangleF(486, 311, 52, 17);
             //RectangleF costumerIdeBounds = new RectangleF(24, 354, 45, 10);
             //RectangleF billToBounds = new RectangleF(35, 156, 195, 84);
@@ -266,24 +266,24 @@ namespace PDF_Reader.Pages
             string data = "";
 
             data = "-Invoice Number: " + invoiceNumer;
-            data += "\n\n-Costumer ID: " + costumerId;
-            data += "\n\n-Bill To: " + billTo;
-            data += "\n\n-Ship To: " + shipTo;
-            data += "\n\n-Ship Date: " + shipDate;
-            data += "\n\n-Order: " + order;
-            data += "\n\n-Total Net Price: " + totalNetPrice;
+            data += "\n\nCostumer ID: " + costumerId;
+            data += "\n\nBill To: " + billTo;
+            data += "\n\nShip To: " + shipTo;
+            data += "\n\nShip Date: " + shipDate;
+            data += "\n\nOrder: " + order;
+            data += "\n\nTotal Net Price: " + totalNetPrice;
             data += "\n\n------------\nQTY:";
             foreach (var qty in quantities)
-                data += "\n\n-" + qty;
+                data += "\n\n" + qty;
             data += "\n\n------------\nProducts:";
             foreach (var p in products)
-                data += "\n\n-" + p;
+                data += "\n\n" + p;
             data += "\n\n------------\nPrices:";
             foreach (var p in prices)
-                data += "\n\n-" + p;
+                data += "\n\n" + p;
             data += "\n\n------------\nNet Prices:";
             foreach (var net in netPrices)
-                data += "\n\n-" + net;
+                data += "\n\n" + net;
             Console.WriteLine(data);
             Validate(quantities, netPrices, totalNetPrice);
         }
