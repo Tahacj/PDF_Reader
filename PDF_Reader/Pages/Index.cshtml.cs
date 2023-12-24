@@ -61,14 +61,6 @@ namespace PDF_Reader.Pages
         {
 
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(file);
-            // Get the first page of the loaded PDF document
-            PdfPageBase page = loadedDocument.Pages[0];
-            // Extract text from the first page with bounds
-            page.ExtractText(out TextLineCollection lineCollection);
-
-            Console.WriteLine("width " + page.Size.Width + "\n hight " + page.Size.Height);
-            PdfGraphics graphics = page.Graphics;
-
 
             //under armor
             //RectangleF invoiceBounds = new RectangleF(485, 24, 60, 10);
@@ -80,6 +72,19 @@ namespace PDF_Reader.Pages
             //RectangleF qtyBounds = new RectangleF(21, 330, 30, 200);
             //RectangleF productsBounds = new RectangleF(162, 330, 80, 200);
             //RectangleF priceBounds = new RectangleF(404, 330, 42, 200);
+            //RectangleF netPriceBounds = new RectangleF(551, 331, 44, 238);
+            //RectangleF totalNetPriceBounds = new RectangleF(533, 579, 60, 12);
+
+            //under armor (Old 2019)
+            RectangleF invoiceBounds = new RectangleF(432, 58, 70, 10);
+            RectangleF costumerIdeBounds = new RectangleF(50, 305, 110, 10);
+            RectangleF billToBounds = new RectangleF(100, 137, 160, 65);
+            RectangleF shipToBounds = new RectangleF(405, 205, 160, 65);
+            RectangleF shipDateBounds = new RectangleF(330, 330, 83, 13);
+            RectangleF orderBounds = new RectangleF(432, 84, 70, 12);
+            RectangleF qtyBounds = new RectangleF(280, 372, 37, 450);
+            RectangleF productsBounds = new RectangleF(8, 372, 76, 450);
+            RectangleF priceBounds = new RectangleF(323, 372, 50, 450);
             //RectangleF netPriceBounds = new RectangleF(551, 331, 44, 238);
             //RectangleF totalNetPriceBounds = new RectangleF(533, 579, 60, 12);
 
@@ -110,17 +115,17 @@ namespace PDF_Reader.Pages
             //RectangleF totalNetPriceBounds = new RectangleF(290, 637, 69, 20);
 
             //Callaway
-            RectangleF invoiceBounds = new RectangleF(21, 219, 60, 10); //
-            RectangleF costumerIdeBounds = new RectangleF(21, 244, 65, 10); //
-            RectangleF billToBounds = new RectangleF(51, 125, 182, 80);
-            RectangleF shipToBounds = new RectangleF(50, 30, 185, 83);
-            RectangleF shipDateBounds = new RectangleF(171, 220, 50, 10);
-            RectangleF orderBounds = new RectangleF(147, 244, 67, 10);
-            RectangleF qtyBounds = new RectangleF(330, 271, 25, 350);
-            RectangleF productsBounds = new RectangleF(16, 271, 25, 350);
-            RectangleF priceBounds = new RectangleF(390, 271, 40, 350);
-            RectangleF netPriceBounds = new RectangleF(516, 266, 55, 379);
-            RectangleF totalNetPriceBounds = new RectangleF(516, 648, 54, 12);
+            //RectangleF invoiceBounds = new RectangleF(21, 219, 60, 10); //
+            //RectangleF costumerIdeBounds = new RectangleF(21, 244, 65, 10); //
+            //RectangleF billToBounds = new RectangleF(51, 125, 182, 80);
+            //RectangleF shipToBounds = new RectangleF(50, 30, 185, 83);
+            //RectangleF shipDateBounds = new RectangleF(171, 220, 50, 10);
+            //RectangleF orderBounds = new RectangleF(147, 244, 67, 10);
+            //RectangleF qtyBounds = new RectangleF(330, 271, 25, 350);
+            //RectangleF productsBounds = new RectangleF(16, 271, 25, 350);
+            //RectangleF priceBounds = new RectangleF(390, 271, 40, 350);
+            //RectangleF netPriceBounds = new RectangleF(516, 266, 55, 379);
+            //RectangleF totalNetPriceBounds = new RectangleF(516, 648, 54, 12);
 
             //Pawakaddy
             //float stratPosX = lineCollection.TextLine[9].Bounds.Location.X;
@@ -157,7 +162,7 @@ namespace PDF_Reader.Pages
             //RectangleF productsBounds = new RectangleF(25, 338, 55, 320);
             //RectangleF priceBounds = new RectangleF(343, 338, 54, 320);
 
-            //Fitleist
+            //Titleist
             //RectangleF invoiceBounds = new RectangleF(200, 225, 60, 10);
             //RectangleF costumerIdeBounds = new RectangleF(320, 225, 41, 10);
             //RectangleF billToBounds = new RectangleF(60, 115, 183, 76);
@@ -201,26 +206,6 @@ namespace PDF_Reader.Pages
             //RectangleF productsBounds = new RectangleF(28, 398, 64, 39);//
             //RectangleF priceBounds = new RectangleF(297, 396, 33, 44);
 
-
-            DrawRectangle(graphics, invoiceBounds, Color.Red);
-            DrawRectangle(graphics, costumerIdeBounds, Color.Blue);
-            DrawRectangle(graphics, billToBounds, Color.Green);
-            DrawRectangle(graphics, shipToBounds, Color.Gold);
-            DrawRectangle(graphics, shipDateBounds, Color.GreenYellow);
-            DrawRectangle(graphics, orderBounds, Color.HotPink);
-            DrawRectangle(graphics, qtyBounds, Color.Orange);
-            DrawRectangle(graphics, productsBounds, Color.Olive);
-            DrawRectangle(graphics, priceBounds, Color.Purple);
-            DrawRectangle(graphics, netPriceBounds, Color.Black);
-            DrawRectangle(graphics, totalNetPriceBounds, Color.Black);
-
-            using (FileStream outputFileStream = new FileStream($"{filename}-modified.pdf", FileMode.Create))
-            {
-                loadedDocument.Save(outputFileStream);
-            }
-
-
-
             string invoiceNumer = "";
             string costumerId = "";
             string billTo = "";
@@ -232,40 +217,78 @@ namespace PDF_Reader.Pages
             var prices = new List<string>();
             var netPrices = new List<string>();
             string totalNetPrice = "";
-            //Get the text provided in the bounds
-            foreach (var txtLine in lineCollection.TextLine)
+
+            // Loop in the pages of the loaded PDF document
+            for (int i = 0; i < (loadedDocument.Pages.Count - 1); i++)
             {
-                foreach (TextWord word in txtLine.WordCollection)
+                PdfPageBase page = loadedDocument.Pages[i];
+                // Extract text from the first page with bounds
+                page.ExtractText(out TextLineCollection lineCollection);
+
+                Console.WriteLine("width " + page.Size.Width + "\n hight " + page.Size.Height);
+                PdfGraphics graphics = page.Graphics;
+
+
+
+                if (i == 0)
                 {
-                    if (IsIntersected(invoiceBounds, word.Bounds))
-                        invoiceNumer = word.Text;
-                    if (IsIntersected(costumerIdeBounds, word.Bounds))
-                        costumerId = word.Text;
-                    if (IsIntersected(billToBounds, word.Bounds))
-                        billTo += word.Text;
-                    if (IsIntersected(shipToBounds, word.Bounds))
-                        shipTo += word.Text;
-                    if (IsIntersected(shipDateBounds, word.Bounds))
-                        shipDate += word.Text;
-                    if (IsIntersected(orderBounds, word.Bounds))
-                        order += word.Text;
-                    if (IsIntersected(qtyBounds, word.Bounds))
-                        quantities.Add(word.Text);
-                    if (IsIntersected(productsBounds, word.Bounds))
-                        products.Add(word.Text);
-                    if (IsIntersected(priceBounds, word.Bounds))
-                        prices.Add(word.Text);
-                    if (IsIntersected(netPriceBounds, word.Bounds))
-                        netPrices.Add(word.Text);
-                    if (IsIntersected(totalNetPriceBounds, word.Bounds))
-                        totalNetPrice += word.Text;
+                    DrawRectangle(graphics, invoiceBounds, Color.Red);
+                    DrawRectangle(graphics, costumerIdeBounds, Color.Blue);
+                    DrawRectangle(graphics, billToBounds, Color.Green);
+                    DrawRectangle(graphics, shipToBounds, Color.Gold);
+                    DrawRectangle(graphics, shipDateBounds, Color.GreenYellow);
+                    DrawRectangle(graphics, orderBounds, Color.HotPink);
+                    //DrawRectangle(graphics, netPriceBounds, Color.Black);
+                    //DrawRectangle(graphics, totalNetPriceBounds, Color.Black);
                 }
+                DrawRectangle(graphics, qtyBounds, Color.Orange);
+                DrawRectangle(graphics, productsBounds, Color.Olive);
+                DrawRectangle(graphics, priceBounds, Color.Purple);
+
+
+
+
+
+                //Get the text provided in the bounds
+                foreach (var txtLine in lineCollection.TextLine)
+                {
+                    foreach (TextWord word in txtLine.WordCollection)
+                    {
+                        if (IsIntersected(invoiceBounds, word.Bounds) && i == 0)
+                            invoiceNumer = word.Text;
+                        if (IsIntersected(costumerIdeBounds, word.Bounds) && i == 0)
+                            costumerId = word.Text;
+                        if (IsIntersected(billToBounds, word.Bounds) && i == 0)
+                            billTo += word.Text;
+                        if (IsIntersected(shipToBounds, word.Bounds) && i == 0)
+                            shipTo += word.Text;
+                        if (IsIntersected(shipDateBounds, word.Bounds) && i == 0)
+                            shipDate += word.Text;
+                        if (IsIntersected(orderBounds, word.Bounds) && i == 0)
+                            order += word.Text;
+                        if (IsIntersected(qtyBounds, word.Bounds))
+                            quantities.Add(word.Text);
+                        if (IsIntersected(productsBounds, word.Bounds))
+                            products.Add(word.Text);
+                        if (IsIntersected(priceBounds, word.Bounds))
+                            prices.Add(word.Text);
+                        //if (IsIntersected(netPriceBounds, word.Bounds))
+                        //    netPrices.Add(word.Text);
+                        //if (IsIntersected(totalNetPriceBounds, word.Bounds))
+                        //    totalNetPrice += word.Text;
+                    }
+                }
+
+            }
+            using (FileStream outputFileStream = new FileStream($"{filename}-modified.pdf", FileMode.Create))
+            {
+                loadedDocument.Save(outputFileStream);
             }
             loadedDocument.Close(true);
 
             string data = "";
 
-            data = "-Invoice Number: " + invoiceNumer;
+            data = "Invoice Number: " + invoiceNumer;
             data += "\n\nCostumer ID: " + costumerId;
             data += "\n\nBill To: " + billTo;
             data += "\n\nShip To: " + shipTo;
