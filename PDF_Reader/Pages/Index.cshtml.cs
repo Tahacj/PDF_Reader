@@ -576,7 +576,7 @@ namespace PDF_Reader.Pages
             foreach (var discount in discountAmount)
                 data += "\n\n-" + discount;
             Console.WriteLine(data);
-            //Validate(quantities, prices, discountAmount, totalNetPrice, brandName);
+            Validate(quantities, prices, discountAmount, totalNetPrice, brandName);
 
         }
 
@@ -612,21 +612,43 @@ namespace PDF_Reader.Pages
                         }
                         else
                         {
-                            if (discountAmount[i].EndsWith("%"))
+                            if (discountAmount.Count ==1)
                             {
-                                total += (
-                             int.Parse(QTY[i].Trim())
-                             * float.Parse(productPrice[i].Trim())
-                             * (1 - (float.Parse(discountAmount[0].TrimEnd('%')) / 100)));
+                                if (discountAmount[0].EndsWith("%"))
+                                {
+                                    total += (
+                                 int.Parse(QTY[i].Trim())
+                                 * float.Parse(productPrice[i].Trim())
+                                 * (1 - (float.Parse(discountAmount[0].TrimEnd('%')) / 100)));
+                                }
+                                else
+                                {
+                                    total += (
+                                  int.Parse(QTY[i].Trim())
+                                  * float.Parse(productPrice[i].Trim())
+                                  * (1 - (float.Parse(discountAmount[i].Trim()) / 100)));
+
+                                }
                             }
                             else
                             {
-                                total += (
-                              int.Parse(QTY[i].Trim())
-                              * float.Parse(productPrice[i].Trim())
-                              * (1 - (float.Parse(discountAmount[i].Trim()) / 100)));
+                                if (discountAmount[i].EndsWith("%"))
+                                {
+                                    total += (
+                                 int.Parse(QTY[i].Trim())
+                                 * float.Parse(productPrice[i].Trim())
+                                 * (1 - (float.Parse(discountAmount[i].TrimEnd('%')) / 100)));
+                                }
+                                else
+                                {
+                                    total += (
+                                  int.Parse(QTY[i].Trim())
+                                  * float.Parse(productPrice[i].Trim())
+                                  * (1 - (float.Parse(discountAmount[i].Trim()) / 100)));
 
+                                }
                             }
+                        
 
                         }
 
