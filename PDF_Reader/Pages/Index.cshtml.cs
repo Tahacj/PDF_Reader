@@ -12,6 +12,7 @@ using System.IO;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Interactive;
 using Org.BouncyCastle.Crypto.Tls;
+using XPOS.Shared.Models;
 
 
 namespace PDF_Reader.Pages
@@ -60,6 +61,7 @@ namespace PDF_Reader.Pages
 
         public void Button_Click(Stream file, string filename)
         {
+            Order order1 = new Order();
 
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(file);
 
@@ -71,6 +73,7 @@ namespace PDF_Reader.Pages
             string shipTo = "";
             string shipDate = "";
             string order = "";
+            int totalQuantity = 0;
             var quantities = new List<string>();
             var products = new List<string>();
             var prices = new List<string>();
@@ -96,19 +99,19 @@ namespace PDF_Reader.Pages
 
                 //under armor
                 // well done , no Notes!!
-                //int height = 17;
-                //string BrandNameBounds = "under armor";
-                //RectangleF invoiceBounds = new RectangleF(485, 24, 60, 10);
-                //RectangleF costumerIdeBounds = new RectangleF(485, 35, 75, 10);
-                //RectangleF billToBounds = new RectangleF(68, 190, 120, 35);
-                //RectangleF shipToBounds = new RectangleF(360, 190, 150, 60);
-                //RectangleF shipDateBounds = new RectangleF(306, 298, 143, 15);
-                //RectangleF orderBounds = new RectangleF(450, 270, 144, 12);
-                //RectangleF qtyBounds = new RectangleF(21, 344, 30, height);
-                //RectangleF productsBounds = new RectangleF(162, 344, 80, height);
-                //RectangleF priceBounds = new RectangleF(404, 344, 42, height);
-                //RectangleF discountAmountBounds = new RectangleF(450, 344, 35, height);
-                //RectangleF totalNetPriceBounds = new RectangleF(533, 579, 60, 12);
+                int height = 17;
+                string BrandNameBounds = "under armor";
+                RectangleF invoiceBounds = new RectangleF(485, 24, 60, 10);
+                RectangleF costumerIdeBounds = new RectangleF(485, 35, 75, 10);
+                RectangleF billToBounds = new RectangleF(68, 190, 120, 35);
+                RectangleF shipToBounds = new RectangleF(360, 190, 150, 60);
+                RectangleF shipDateBounds = new RectangleF(306, 298, 143, 15);
+                RectangleF orderBounds = new RectangleF(450, 270, 144, 12);
+                RectangleF qtyBounds = new RectangleF(21, 344, 30, height);
+                RectangleF productsBounds = new RectangleF(162, 344, 80, height);
+                RectangleF priceBounds = new RectangleF(404, 344, 42, height);
+                RectangleF discountAmountBounds = new RectangleF(450, 344, 35, height);
+                RectangleF totalNetPriceBounds = new RectangleF(533, 579, 60, 12);
 
                 //under armor (Old 2019)
                 //the Discount percentage is different , providing wrong details
@@ -128,19 +131,19 @@ namespace PDF_Reader.Pages
 
                 //skechers 
                 //well done ,no mistakes
-                int height = 35;
-                string BrandNameBounds = "skechers";
-                RectangleF invoiceBounds = new RectangleF(450, 130, 100, 13);
-                RectangleF costumerIdeBounds = new RectangleF(15, 240, 50, 15);
-                RectangleF billToBounds = new RectangleF(66, 152, 225, 62);
-                RectangleF shipToBounds = new RectangleF(330, 150, 225, 62);
-                RectangleF shipDateBounds = new RectangleF(339, 130, 106, 13);
-                RectangleF orderBounds = new RectangleF(208, 270, 105, 13);
-                RectangleF qtyBounds = new RectangleF(406, 350, 30, height);
-                RectangleF productsBounds = new RectangleF(12, 350, 48, height);
-                RectangleF priceBounds = new RectangleF(440, 350, 55, height);
-                RectangleF discountAmountBounds = new RectangleF(436, 780, 22, 16);
-                RectangleF totalNetPriceBounds = new RectangleF(503, 761, 87, 10);
+                //int height = 35;
+                //string BrandNameBounds = "skechers";
+                //RectangleF invoiceBounds = new RectangleF(450, 130, 100, 13);
+                //RectangleF costumerIdeBounds = new RectangleF(15, 240, 50, 15);
+                //RectangleF billToBounds = new RectangleF(66, 152, 225, 62);
+                //RectangleF shipToBounds = new RectangleF(330, 150, 225, 62);
+                //RectangleF shipDateBounds = new RectangleF(339, 130, 106, 13);
+                //RectangleF orderBounds = new RectangleF(208, 270, 105, 13);
+                //RectangleF qtyBounds = new RectangleF(406, 350, 30, height);
+                //RectangleF productsBounds = new RectangleF(12, 350, 48, height);
+                //RectangleF priceBounds = new RectangleF(440, 350, 55, height);
+                //RectangleF discountAmountBounds = new RectangleF(436, 780, 22, 16);
+                //RectangleF totalNetPriceBounds = new RectangleF(503, 761, 87, 10);
 
                 //Taylor made
                 //well done, no notes
@@ -161,7 +164,7 @@ namespace PDF_Reader.Pages
                 //Callaway
                 //works fine , no notes
                 //string BrandNameBounds = "Callaway";
-                //int height = 30;
+                //int height = 25;
                 //RectangleF invoiceBounds = new RectangleF(21, 219, 60, 10); //
                 //RectangleF costumerIdeBounds = new RectangleF(21, 244, 65, 10); //
                 //RectangleF billToBounds = new RectangleF(51, 125, 182, 80);
@@ -243,7 +246,7 @@ namespace PDF_Reader.Pages
 
                 //MOTOCADDY // reading verticaly need fixing
                 //could not find discount column
-                //int height = 25;
+                //int height = 30;
                 //string BrandNameBounds = "Motocaddy";
                 //RectangleF invoiceBounds = new RectangleF(430, 89, 52, 12);
                 //RectangleF costumerIdeBounds = new RectangleF(427, 110, 43, 13);
@@ -259,6 +262,7 @@ namespace PDF_Reader.Pages
 
                 //MASTERS217
                 // could not find discount column
+                //string BrandNameBounds = "Masters217";
                 //int height = 12;
                 //RectangleF invoiceBounds = new RectangleF(250, 18, 75, 20);
                 //RectangleF costumerIdeBounds = new RectangleF(276, 65, 56, 16);
@@ -269,7 +273,7 @@ namespace PDF_Reader.Pages
                 //RectangleF qtyBounds = new RectangleF(383, 241, 44, height);
                 //RectangleF productsBounds = new RectangleF(5, 241, 63, height);
                 //RectangleF priceBounds = new RectangleF(469, 241, 36, height);
-                //RectangleF netPriceBounds = new RectangleF(528, 233, 41, 524);
+                //RectangleF discountAmountBounds = new RectangleF(0, 0, 0, 0);
                 //RectangleF totalNetPriceBounds = new RectangleF(515, 767, 53, 18);
 
                 //ClevelandGolf
@@ -321,12 +325,12 @@ namespace PDF_Reader.Pages
                         //quantities.Add(qty);
                         //products.Add(prod);
                         //prices.Add(price);
-                        if (brandName != "Callaway")
+                        if (brandName != "Callaway" && brandName != "Motocaddy")
                         {
                             qtyBounds.Height += height;
                             productsBounds.Height += height;
                             priceBounds.Height += height;
-                            if (brandName != "skechers")
+                            if (brandName != "skechers" && brandName != "Masters217")
                             {
                                 discountAmountBounds.Height += height;
                             }
@@ -339,7 +343,7 @@ namespace PDF_Reader.Pages
                             productsRectangles.Add(productsBounds);
                         }
 
-                        if (brandName == "Callaway")
+                        if (brandName == "Callaway" || brandName == "Motocaddy")
                         {
                             RectangleF tempoqty = new RectangleF(qtyBounds.X, qtyBounds.Y + height, qtyBounds.Width, qtyBounds.Height);
                             RectangleF tempoprice = new RectangleF(priceBounds.X, priceBounds.Y + height, priceBounds.Width, priceBounds.Height);
@@ -368,19 +372,19 @@ namespace PDF_Reader.Pages
                     qtyBounds = new RectangleF(0, 0, 0, 0);
                     productsBounds = new RectangleF(0, 0, 0, 0);
                     priceBounds = new RectangleF(0, 0, 0, 0);
-                    if (brandName != "skechers")
+                    if (brandName != "skechers" && brandName != "Masters217")
                     {
                         discountAmountBounds = new RectangleF(0, 0, 0, 0);
                     }
                 }
                 else
                 {
-                    if (brandName != "Callaway")
+                    if (brandName != "Callaway" && brandName != "Motocaddy")
                     {
                         qtyBounds.Height -= height;
                         productsBounds.Height -= height;
                         priceBounds.Height -= height;
-                        if (brandName != "skechers")
+                        if (brandName != "skechers" && brandName != "Masters217")
                         {
                             discountAmountBounds.Height -= height;
                         }
@@ -411,6 +415,7 @@ namespace PDF_Reader.Pages
                 {
                     for (int r = 0; r < qtyRectangles.Count; r++)
                     {
+
                         DrawRectangle(graphics, qtyRectangles[r], Color.Purple);
                         DrawRectangle(graphics, priceRectangles[r], Color.Purple);
                         DrawRectangle(graphics, discountRectangles[r], Color.Purple);
@@ -420,6 +425,30 @@ namespace PDF_Reader.Pages
                         prices.Add(tempList[1]);
                         discountAmount.Add(tempList[2]);
                         products.Add(tempList[3]);
+                        order1.OrderItems.Add(new OrderItem
+                        {
+                            Order_ID = order1.ID,
+                            Name = products[r],
+                            Quantity = int.Parse(quantities[r]),
+                            CostPrice = decimal.Parse(prices[r]),
+                            Order = order1
+                        });
+                    }
+
+                }
+                if (brandName == "Motocaddy")
+                {
+                    for (int r = 0; r < qtyRectangles.Count; r++)
+                    {
+
+                        DrawRectangle(graphics, qtyRectangles[r], Color.Purple);
+                        DrawRectangle(graphics, priceRectangles[r], Color.Purple);
+                        //DrawRectangle(graphics, discountRectangles[r], Color.Purple);
+                        DrawRectangle(graphics, productsRectangles[r], Color.Purple);
+                        List<string> tempList = ExtractTextFromRectangleForNoDiscount(pageToSend, qtyRectangles[r], priceRectangles[r], productsRectangles[r]);
+                        quantities.Add(tempList[0]);
+                        prices.Add(tempList[1]);
+                        products.Add(tempList[2]);
                     }
 
                 }
@@ -443,7 +472,7 @@ namespace PDF_Reader.Pages
                             if (IsIntersected(orderBounds, word.Bounds))
                                 order += word.Text;
                         }
-                        if (brandName != "Callaway")
+                        if (brandName != "Callaway" && brandName != "Motocaddy")
                         {
 
                             if (IsIntersected(qtyBounds, word.Bounds))
@@ -451,6 +480,7 @@ namespace PDF_Reader.Pages
                                 if (!string.IsNullOrWhiteSpace(word.Text))
                                 {
                                     quantities.Add(word.Text);
+                                    totalQuantity += int.Parse(word.Text);
                                 }
 
                             }
@@ -546,6 +576,52 @@ namespace PDF_Reader.Pages
                     //}
                 }
 
+                //string brandName = "";
+                //string invoiceNumer = "";
+                //string costumerId = "";
+                //string billTo = "";
+                //string shipTo = "";
+                //string shipDate = "";
+                //string order = "";
+                //int totalQuantity = 0;
+                //var quantities = new List<string>();
+                //var products = new List<string>();
+                //var prices = new List<string>();
+                //var discountAmount = new List<string>();
+                //string totalNetPrice = "";
+                //// for Cllaway
+                //var qtyRectangles = new List<RectangleF>();
+                //var priceRectangles = new List<RectangleF>();
+                //var discountRectangles = new List<RectangleF>();
+                //var productsRectangles = new List<RectangleF>();
+
+
+
+
+
+
+                order1.OrderType = OrderType.StockIn;
+                order1.InvoiceNo = invoiceNumer;
+                order1.Process = OrderProcess.Brandtrac;
+                order1.Quantity = totalQuantity;
+                if (brandName != "Callaway")
+                {
+                    for (int ds = 0; i < quantities.Count; i++)
+                    {
+
+                        order1.OrderItems.Add(new OrderItem
+                        {
+                            Order_ID = order1.ID,
+                            Name = products[ds],
+                            Quantity = int.Parse(quantities[ds]),
+                            CostPrice = decimal.Parse(prices[ds]),
+                            Order = order1
+
+                        });
+                    }
+                }
+                Console.WriteLine(order1);
+
             }
 
             using (FileStream outputFileStream = new FileStream($"{filename}-modified.pdf", FileMode.Create))
@@ -576,7 +652,7 @@ namespace PDF_Reader.Pages
             foreach (var discount in discountAmount)
                 data += "\n\n-" + discount;
             Console.WriteLine(data);
-            Validate(quantities, prices, discountAmount, totalNetPrice, brandName);
+            //Validate(quantities, prices, discountAmount, totalNetPrice, brandName);
 
         }
 
@@ -612,7 +688,7 @@ namespace PDF_Reader.Pages
                         }
                         else
                         {
-                            if (discountAmount.Count ==1)
+                            if (discountAmount.Count == 1)
                             {
                                 if (discountAmount[0].EndsWith("%"))
                                 {
@@ -648,7 +724,7 @@ namespace PDF_Reader.Pages
 
                                 }
                             }
-                        
+
 
                         }
 
@@ -698,6 +774,32 @@ namespace PDF_Reader.Pages
             }
 
             return new List<string> { qty, price, discount, product };
+        }
+        public List<string> ExtractTextFromRectangleForNoDiscount(TextLineCollection page, RectangleF qtyRec, RectangleF priceRec, RectangleF productRec)
+        {
+            string qty = "";
+            string price = "";
+            string product = "";
+            foreach (var txtLine in page.TextLine)
+            {
+                foreach (TextWord word in txtLine.WordCollection)
+                {
+                    if (IsIntersected(qtyRec, word.Bounds))
+                    {
+                        qty += word.Text;
+                    }
+                    if (IsIntersected(priceRec, word.Bounds))
+                    {
+                        price += word.Text;
+                    }
+                    if (IsIntersected(productRec, word.Bounds))
+                    {
+                        product += word.Text;
+                    }
+                }
+            }
+
+            return new List<string> { qty, price, product };
         }
 
     }
