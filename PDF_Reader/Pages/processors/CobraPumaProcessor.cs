@@ -167,6 +167,10 @@ namespace PDF_Reader.Pages
                 DrawRectangle(graphics, shipDateBounds, Color.GreenYellow);
                 DrawRectangle(graphics, orderBounds, Color.HotPink);
                 DrawRectangle(graphics, totalNetPriceBounds, Color.Black);
+                DrawRectangle(graphics, qtyBounds, Color.Orange);
+                DrawRectangle(graphics, productsBounds, Color.Olive);
+                DrawRectangle(graphics, priceBounds, Color.Purple);
+
 
                 foreach (var txtLine in lineCollection.TextLine)
                 {
@@ -188,22 +192,41 @@ namespace PDF_Reader.Pages
                                 order += word.Text;
                         }
 
+
+                        if (IsIntersected(qtyBounds, word.Bounds))
+                        {
+                            if (!string.IsNullOrWhiteSpace(word.Text))
+                            {
+                                quantities.Add(word.Text);
+                                totalQuantity += int.Parse(word.Text);
+                            }
+
+                        }
+                        if (IsIntersected(productsBounds, word.Bounds))
+                        {
+                            if (!string.IsNullOrWhiteSpace(word.Text))
+                            {
+                                products.Add(word.Text);
+                            }
+                        }
+                        if (IsIntersected(priceBounds, word.Bounds))
+                        {
+                            if (!string.IsNullOrWhiteSpace(word.Text))
+                            {
+                                prices.Add(word.Text);
+                            }
+                        }
+                        if (IsIntersected(discountAmountBounds, word.Bounds))
+                        {
+                            if (!string.IsNullOrWhiteSpace(word.Text))
+                            {
+                                discountAmount.Add(word.Text);
+                            }
+                        }
                         if (IsIntersected(totalNetPriceBounds, word.Bounds))
-                            totalNetPrice += float.TryParse(word.Text.Trim(), out float v) ? v : 0;
+                            totalNetPrice += word.Text;
 
                     }
-                }
-
-                for (int r = 0; r < qtyRectangles.Count; r++)
-                {
-                    List<string> tempList = ExtractTextFromRectangle(lineCollection, qtyRectangles[r], priceRectangles[r], discountRectangles[r], productsRectangles[r], descriptionRectangles[r], vatRectangles[r]);
-                    quantities.Add(tempList[0]);
-                    prices.Add(tempList[1]);
-                    discountAmount.Add(tempList[2]);
-                    products.Add(tempList[3]);
-                    description.Add(tempList[4]);
-                    vat.Add(tempList[5]);
-                    totalQuantity += int.Parse(tempList[0]);
                 }
 
                 float total = 0;
@@ -248,6 +271,32 @@ namespace PDF_Reader.Pages
             {
                 loadedDocument.Save(outputFileStream);
             }
+            string data = "";
+
+            data = "-Invoice Number: " + invoiceNumer;
+            data = "Invoice Number: " + invoiceNumer;
+            data += "\n\nCostumer ID: " + costumerId;
+            data += "\n\nBill To: " + billTo;
+            data += "\n\nShip To: " + shipTo;
+            data += "\n\nShip Date: " + shipDate;
+            data += "\n\nOrder: " + order;
+            data += "\n\nTotal Net Price: " + totalNetPrice;
+            data += "\n\n------------\nQTY:";
+            foreach (var qty in quantities)
+                data += "\n\n" + qty;
+            data += "\n\n------------\nProducts:";
+            foreach (var p in products)
+                data += "\n\n" + p;
+            data += "\n\n------------\nPrices:";
+            foreach (var p in prices)
+                data += "\n\n" + p;
+            data += "\n\n------------\n VAT Prices:";
+            foreach (var net in vat)
+                data += "\n\n" + net;
+            data += "\n\n------------\n description:";
+            foreach (var net in description)
+                data += "\n\n" + net;
+            Console.WriteLine(data);
             //loadedDocument.Close(true);
             //await CreatStockIn(fileName, staffid);
         }

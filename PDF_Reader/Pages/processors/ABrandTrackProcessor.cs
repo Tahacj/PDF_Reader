@@ -19,12 +19,14 @@ namespace PDF_Reader.Pages
             return false;
         }
 
-        public List<string> ExtractTextFromRectangle(TextLineCollection page, RectangleF qtyRec, RectangleF priceRec, RectangleF discountRec, RectangleF productRec)
+        public List<string> ExtractTextFromRectangle(TextLineCollection page, RectangleF qtyRec, RectangleF priceRec, RectangleF discountRec, RectangleF productRec, RectangleF descriptionRec, RectangleF VATRec)
         {
             string qty = "";
             string price = "";
             string discount = "";
             string product = "";
+            string description = "";
+            string VAT = "";
             foreach (var txtLine in page.TextLine)
             {
                 foreach (TextWord word in txtLine.WordCollection)
@@ -45,10 +47,18 @@ namespace PDF_Reader.Pages
                     {
                         product += word.Text;
                     }
+                    if (IsIntersected(descriptionRec, word.Bounds))
+                    {
+                        description += word.Text;
+                    }
+                    if (IsIntersected(VATRec, word.Bounds))
+                    {
+                        VAT += word.Text;
+                    }
                 }
             }
 
-            return new List<string> { qty, price, discount, product };
+            return new List<string> { qty, price, discount, product, description, VAT };
         }
 
         public List<string> ExtractTextFromRectangleForNoDiscount(TextLineCollection page, RectangleF qtyRec, RectangleF priceRec, RectangleF productRec)
