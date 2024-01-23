@@ -685,6 +685,8 @@ namespace PDF_Reader.Pages
             // Extract text from the first page with bounds
             page.ExtractText(out TextLineCollection lineCollection);
             string name = "";
+                          
+                Console.WriteLine("width " + page.Size.Width + "\n hight " + page.Size.Height);
             foreach (var txtLine in lineCollection.TextLine)
             {
                 //DrawRectangle(graphics, txtLine.Bounds, Color.Orange);
@@ -693,7 +695,11 @@ namespace PDF_Reader.Pages
 
                     // look for Callaway
                     if (IsIntersected(new RectangleF(433, 89, 52, 10), word.Bounds))
-                        if (word.Text.Contains("CALLAWAY")) return "Callaway";
+                    {
+                        name += word.Text;
+                        if (name.Contains("CALLAWAY")) return "Callaway";
+
+                    }
                     // look for Under Armor old
                     if (IsIntersected(new RectangleF(13, 70, 68, 11), word.Bounds))
                     {
