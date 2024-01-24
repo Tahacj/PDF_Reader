@@ -112,6 +112,7 @@ namespace PDF_Reader.Pages
                             if (word.Text.Length > 0 && float.TryParse(word.Text, out float qnty))
                             {
                                 qtyRectangles.Add(word.Bounds);
+                                qtyBounds.Y += height;
                             }
                     }
                 }
@@ -230,7 +231,7 @@ namespace PDF_Reader.Pages
                 else
                 {
                     // skip file and make a function to retrun the fualted file
-                    break;
+                    //break;
                 }
                 using (FileStream outputFileStream = new FileStream($"{fileName}-modified.pdf", FileMode.Create))
                 {

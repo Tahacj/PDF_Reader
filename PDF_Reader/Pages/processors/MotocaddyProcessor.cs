@@ -22,7 +22,7 @@ namespace PDF_Reader.Pages
         private List<string> prices = new List<string>();
         private List<string> discountAmount = new List<string>();
         private List<string> description = new List<string>();
-        private List<string> vat = new List<string>(); 
+        private List<string> vat = new List<string>();
         private string totalNetPrice = "";
         static int height = 10;
         RectangleF invoiceBounds = new RectangleF(430, 89, 52, 12);
@@ -266,11 +266,12 @@ namespace PDF_Reader.Pages
             foreach (var p in prices)
                 data += "\n\n" + p;
             data += "\n\n------------\n VAT Prices:";
-            //foreach (var net in vat)
-            //    data += "\n\n" + net;
-            //data += "\n\n------------\n description:";
-            //foreach (var net in description)
-            //    data += "\n\n" + net;
+            foreach (var net in vat)
+                data += "\n\n" + net;
+            data += "\n\n------------\n description:";
+            foreach (var net in description)
+                data += "\n\n" + net;
+            
             Console.WriteLine(data);
 
 
