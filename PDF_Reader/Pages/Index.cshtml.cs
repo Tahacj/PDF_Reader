@@ -682,9 +682,12 @@ namespace PDF_Reader.Pages
 
             PdfPageBase page = loadedDocument.Pages[0];
 
+
             // Extract text from the first page with bounds
             page.ExtractText(out TextLineCollection lineCollection);
             string name = "";
+            float stratPosX = lineCollection.TextLine[9].Bounds.Location.X;
+            float stratPosY = lineCollection.TextLine[9].Bounds.Location.Y;
                           
                 Console.WriteLine("width " + page.Size.Width + "\n hight " + page.Size.Height);
             foreach (var txtLine in lineCollection.TextLine)
@@ -719,7 +722,7 @@ namespace PDF_Reader.Pages
                     if (IsIntersected(new RectangleF(273, 26, 52, 18), word.Bounds))
                         if (word.Text.Contains("MIZUNO")) return "Mizuno";
                     // look for Powakaddy
-                    if (IsIntersected(new RectangleF(443, 55, 50, 10), word.Bounds))
+                    if (IsIntersected(new RectangleF(434 + stratPosX, 37 + stratPosY, 50, 10), word.Bounds))
                         if (word.Text.Contains("PowaKaddy")) return "Powakaddy";
                     // look for Under Armor
                     if (IsIntersected(new RectangleF(65, 67, 63, 11), word.Bounds))
