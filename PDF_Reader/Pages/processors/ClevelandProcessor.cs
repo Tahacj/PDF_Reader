@@ -35,9 +35,9 @@ namespace PDF_Reader.Pages
         RectangleF billToBounds = new RectangleF(35, 156, 195, 84);
         RectangleF shipToBounds = new RectangleF(368, 154, 195, 87);
         RectangleF shipDateBounds = new RectangleF(416, 311, 49, 16);
-        RectangleF orderBounds = new RectangleF(400, 263, 33, 12);
+        RectangleF orderBounds = new RectangleF(400, 263, 33, 10);
         RectangleF qtyBounds = new RectangleF(248, 398, 42, height);
-        //RectangleF descriptionBounds = new RectangleF(91, 398, 137, height);
+        RectangleF descriptionBounds = new RectangleF(91, 398, 137, height);
         RectangleF productsBounds = new RectangleF(28, 398, 64, height);
         RectangleF priceBounds = new RectangleF(297, 398, 33, height);
         RectangleF discountAmountBounds = new RectangleF(340, 398, 40, height);
@@ -139,7 +139,7 @@ namespace PDF_Reader.Pages
                     discountAmountBounds.Height -= height;
                 }
 
-                orderBounds = new RectangleF(32, productsBounds.Y + productsBounds.Height + 54, 50, 18);
+                orderBounds = new RectangleF(32, productsBounds.Y + productsBounds.Height + 20, 50, 18);
 
                 foreach (var txtLine in lineCollection.TextLine)
                 {
@@ -233,7 +233,50 @@ namespace PDF_Reader.Pages
                     // skip file and make a function to retrun the fualted file
                     break;
                 }
+
+                DrawRectangle(graphics, invoiceBounds, Color.Red);
+                DrawRectangle(graphics, costumerIdeBounds, Color.Blue);
+                DrawRectangle(graphics, billToBounds, Color.Green);
+                DrawRectangle(graphics, shipToBounds, Color.Gold);
+                DrawRectangle(graphics, shipDateBounds, Color.GreenYellow);
+                DrawRectangle(graphics, orderBounds, Color.HotPink);
+                DrawRectangle(graphics, discountAmountBounds, Color.Black);
+                DrawRectangle(graphics, totalNetPriceBounds, Color.Black);
+                DrawRectangle(graphics, qtyBounds, Color.Orange);
+                DrawRectangle(graphics, productsBounds, Color.Olive);
+                DrawRectangle(graphics, descriptionBounds, Color.Black);
+                DrawRectangle(graphics, priceBounds, Color.Purple);
             }
+
+            using (FileStream outputFileStream = new FileStream($"{fileName}-modified.pdf", FileMode.Create))
+            {
+                loadedDocument.Save(outputFileStream);
+            }
+            string data = "";
+            data = "-Invoice Number: " + invoiceNumer;
+            data = "Invoice Number: " + invoiceNumer;
+            data += "\n\nCostumer ID: " + costumerId;
+            data += "\n\nBill To: " + billTo;
+            data += "\n\nShip To: " + shipTo;
+            data += "\n\nShip Date: " + shipDate;
+            data += "\n\nOrder: " + order;
+            data += "\n\nTotal Net Price: " + totalNetPrice;
+            data += "\n\n------------\nQTY:";
+            foreach (var q in quantities)
+                data += "\n\n" + q;
+            data += "\n\n------------\nProducts:";
+            foreach (var p in products)
+                data += "\n\n" + p;
+            data += "\n\n------------\nPrices:";
+            foreach (var p in prices)
+                data += "\n\n" + p;
+            data += "\n\n------------\n VAT Prices:";
+            //foreach (var net in vat)
+            //    data += "\n\n" + net;
+            //data += "\n\n------------\n description:";
+            //foreach (var net in description)
+            //    data += "\n\n" + net;
+            Console.WriteLine(data);
 
             //foreach (OrderItem item in order1.OrderItems)
             //{

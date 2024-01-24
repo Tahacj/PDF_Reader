@@ -21,19 +21,30 @@ namespace PDF_Reader.Pages
         private List<string> barCodes = new List<string>();
         private List<string> prices = new List<string>();
         private List<string> discountAmount = new List<string>();
+        private List<string> description = new List<string>();
+        private List<string> vat = new List<string>(); 
         private string totalNetPrice = "";
         static int height = 10;
         RectangleF invoiceBounds = new RectangleF(430, 89, 52, 12);
         RectangleF costumerIdeBounds = new RectangleF(427, 110, 43, 13);
         RectangleF billToBounds = new RectangleF(46, 179, 126, 70);
         RectangleF shipToBounds = new RectangleF(50, 273, 125, 68);
-        RectangleF shipDateBounds = new RectangleF(428, 180, 53, 14);
+        RectangleF shipDateBounds = new RectangleF(428, 183, 53, 10);
         RectangleF orderBounds = new RectangleF(495, 208, 56, 11);
         RectangleF qtyBounds = new RectangleF(63, 355, 36, height);
         RectangleF productsBounds = new RectangleF(476, 355, 52, height);
         RectangleF priceBounds = new RectangleF(297, 355, 32, height);
+        RectangleF vatBounds = new RectangleF(372, 355, 25, height);
+        RectangleF descriptionBounds = new RectangleF(138, 355, 100, height);
         RectangleF discountAmountBounds = new RectangleF(0, 0, 0, 0);
         RectangleF totalNetPriceBounds = new RectangleF(0, 0, 0, 0);
+
+        List<RectangleF> qtyRectangles = new List<RectangleF>();
+        List<RectangleF> priceRectangles = new List<RectangleF>();
+        List<RectangleF> discountRectangles = new List<RectangleF>();
+        List<RectangleF> productsRectangles = new List<RectangleF>();
+        List<RectangleF> descriptionRectangles = new List<RectangleF>();
+        List<RectangleF> vatRectangles = new List<RectangleF>();
 
         //private XCODESImports xCODESImports = new();
         //private MainDbContext _mainDbContext = new();
@@ -73,7 +84,13 @@ namespace PDF_Reader.Pages
         public async Task ExtractData(Stream file, string fileName)
         {
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(file);
-            int lastPageNum = loadedDocument.Pages.Count - 1;
+
+            List<RectangleF> qtyRectangles = new List<RectangleF>();
+            List<RectangleF> priceRectangles = new List<RectangleF>();
+            List<RectangleF> discountRectangles = new List<RectangleF>();
+            List<RectangleF> productsRectangles = new List<RectangleF>();
+            List<RectangleF> descriptionRectangles = new List<RectangleF>();
+            List<RectangleF> vatRectangles = new List<RectangleF>();
 
 
             // Loop in the pages of the loaded PDF document
@@ -84,7 +101,7 @@ namespace PDF_Reader.Pages
                 // Extract text from the first page with bounds
                 page.ExtractText(out TextLineCollection lineCollection);
                 PdfGraphics graphics = page.Graphics;
-                bool qty = false, prod = false, price = false;
+                bool qty = false;
                 foreach (var txtLine in lineCollection.TextLine)
                 {
                     //DrawRectangle(graphics, txtLine.Bounds, Color.Orange);
@@ -101,43 +118,49 @@ namespace PDF_Reader.Pages
                                 {
                                     qty = true;
                                     qtyBounds.Height = (word.Bounds.Y - qtyBounds.Y + word.Bounds.Height + 2);
+                                    qtyRectangles.Add(word.Bounds);
                                 }
                             }
-                        if (IsIntersected(productsBounds, word.Bounds) || prod)
-                            if (word.Text.Length > 0 || prod)
-                            {
-                                if (productsBounds.Y >= word.Bounds.Y)
-                                {
-                                    prod = false;
-                                }
-                                else
-                                {
-                                    prod = true;
-                                    productsBounds.Height = (word.Bounds.Y - productsBounds.Y + word.Bounds.Height + 2);
-                                }
-                            }
-                        if (IsIntersected(priceBounds, word.Bounds) && float.TryParse(word.Text, out float prc) || price)
-                            if (word.Text.Length > 0 || price)
-                            {
-                                if (priceBounds.Y >= word.Bounds.Y)
-                                {
-                                    price = false;
-                                }
-                                else
-                                {
-                                    price = true;
-                                    priceBounds.Height = (word.Bounds.Y - priceBounds.Y + word.Bounds.Height + 2);
-                                }
-                            }
-                    }
-                    if (qtyBounds.Height == productsBounds.Height && productsBounds.Height == priceBounds.Height)
-                    {
-
-
-                        totalNetPriceBounds = new RectangleF(526, productsBounds.Y + productsBounds.Height + 37, 30, 10);
                     }
                 }
 
+                for (int j = 0; j < qtyRectangles.Count; j++)
+                {
+                    float newHeight = 0;
+                    if (qtyRectangles.Count - 1 > j)
+                    {
+                        newHeight = qtyRectangles[j + 1].Y - qtyRectangles[j].Y - 3;
+                    }
+                    else newHeight = 10;
+
+                    productsBounds.Y = qtyRectangles[j].Y;
+                    priceBounds.Y = qtyRectangles[j].Y;
+                    discountAmountBounds.Y = qtyRectangles[j].Y;
+                    descriptionBounds.Y = qtyRectangles[j].Y;
+                    vatBounds.Y = qtyRectangles[j].Y;
+
+                    productsBounds.Height = newHeight;
+                    priceBounds.Height = newHeight;
+                    discountAmountBounds.Height = newHeight;
+                    descriptionBounds.Height = newHeight;
+                    vatBounds.Height = newHeight;
+
+                    productsRectangles.Add(productsBounds);
+                    priceRectangles.Add(priceBounds);
+                    discountRectangles.Add(discountAmountBounds);
+                    descriptionRectangles.Add(descriptionBounds);
+                    vatRectangles.Add(vatBounds);
+
+
+                    DrawRectangle(graphics, discountAmountBounds, Color.Black);
+                    DrawRectangle(graphics, qtyRectangles[j], Color.Orange);
+                    DrawRectangle(graphics, productsBounds, Color.Olive);
+                    DrawRectangle(graphics, descriptionBounds, Color.Black);
+                    DrawRectangle(graphics, priceBounds, Color.Purple);
+                    DrawRectangle(graphics, vatBounds, Color.Purple);
+                }
+
+                totalNetPriceBounds = new RectangleF(526, qtyBounds.Y + qtyBounds.Height + 37, 30, 10);
                 foreach (var txtLine in lineCollection.TextLine)
                 {
                     foreach (TextWord word in txtLine.WordCollection)
@@ -158,41 +181,22 @@ namespace PDF_Reader.Pages
                                 order += word.Text;
                         }
 
-
-                        if (IsIntersected(qtyBounds, word.Bounds))
-                        {
-                            if (!string.IsNullOrWhiteSpace(word.Text))
-                            {
-                                quantities.Add(word.Text);
-                                totalQuantity += int.Parse(word.Text);
-                            }
-
-                        }
-                        if (IsIntersected(productsBounds, word.Bounds))
-                        {
-                            if (!string.IsNullOrWhiteSpace(word.Text))
-                            {
-                                products.Add(word.Text);
-                            }
-                        }
-                        if (IsIntersected(priceBounds, word.Bounds))
-                        {
-                            if (!string.IsNullOrWhiteSpace(word.Text))
-                            {
-                                prices.Add(word.Text);
-                            }
-                        }
-                        if (IsIntersected(discountAmountBounds, word.Bounds))
-                        {
-                            if (!string.IsNullOrWhiteSpace(word.Text))
-                            {
-                                discountAmount.Add(word.Text);
-                            }
-                        }
-                        if (IsIntersected(totalNetPriceBounds, word.Bounds) && i == lastPageNum)
-                            totalNetPrice += word.Text;
+                        if (IsIntersected(totalNetPriceBounds, word.Bounds))
+                            totalNetPrice += float.TryParse(word.Text.Trim(), out float v) ? v : 0;
 
                     }
+                }
+
+                for (int r = 0; r < qtyRectangles.Count; r++)
+                {
+                    List<string> tempList = ExtractTextFromRectangle(lineCollection, qtyRectangles[r], priceRectangles[r], discountRectangles[r], productsRectangles[r], descriptionRectangles[r], vatRectangles[r]);
+                    quantities.Add(tempList[0]);
+                    prices.Add(tempList[1]);
+                    discountAmount.Add(tempList[2]);
+                    products.Add(tempList[3]);
+                    description.Add(tempList[4]);
+                    vat.Add(tempList[5]);
+                    totalQuantity += int.Parse(tempList[0]);
                 }
 
                 float total = 0;
@@ -229,7 +233,46 @@ namespace PDF_Reader.Pages
                     // skip file and make a function to retrun the fualted file
                     break;
                 }
+                DrawRectangle(graphics, invoiceBounds, Color.Red);
+                DrawRectangle(graphics, costumerIdeBounds, Color.Blue);
+                DrawRectangle(graphics, billToBounds, Color.Green);
+                DrawRectangle(graphics, shipToBounds, Color.Gold);
+                DrawRectangle(graphics, shipDateBounds, Color.GreenYellow);
+                DrawRectangle(graphics, orderBounds, Color.HotPink);
+                DrawRectangle(graphics, discountAmountBounds, Color.Black);
+                DrawRectangle(graphics, totalNetPriceBounds, Color.Black);
             }
+
+            using (FileStream outputFileStream = new FileStream($"{fileName}-modified.pdf", FileMode.Create))
+            {
+                loadedDocument.Save(outputFileStream);
+            }
+            string data = "";
+            data = "-Invoice Number: " + invoiceNumer;
+            data = "Invoice Number: " + invoiceNumer;
+            data += "\n\nCostumer ID: " + costumerId;
+            data += "\n\nBill To: " + billTo;
+            data += "\n\nShip To: " + shipTo;
+            data += "\n\nShip Date: " + shipDate;
+            data += "\n\nOrder: " + order;
+            data += "\n\nTotal Net Price: " + totalNetPrice;
+            data += "\n\n------------\nQTY:";
+            foreach (var q in quantities)
+                data += "\n\n" + q;
+            data += "\n\n------------\nProducts:";
+            foreach (var p in products)
+                data += "\n\n" + p;
+            data += "\n\n------------\nPrices:";
+            foreach (var p in prices)
+                data += "\n\n" + p;
+            data += "\n\n------------\n VAT Prices:";
+            //foreach (var net in vat)
+            //    data += "\n\n" + net;
+            //data += "\n\n------------\n description:";
+            //foreach (var net in description)
+            //    data += "\n\n" + net;
+            Console.WriteLine(data);
+
 
 
             //await CreatStockIn(fileName, staffid);

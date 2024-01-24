@@ -33,19 +33,19 @@ namespace PDF_Reader.Pages
                 {
                     if (IsIntersected(qtyRec, word.Bounds))
                     {
-                        qty += word.Text;
+                        qty += word.Text.Trim();
                     }
                     if (IsIntersected(priceRec, word.Bounds))
                     {
-                        price += word.Text;
+                        price += word.Text.Trim();
                     }
                     if (IsIntersected(discountRec, word.Bounds))
                     {
-                        discount += word.Text;
+                        discount += word.Text.Trim();
                     }
                     if (IsIntersected(productRec, word.Bounds))
                     {
-                        product += word.Text;
+                        product += word.Text.Trim();
                     }
                     if (IsIntersected(descriptionRec, word.Bounds))
                     {
@@ -53,7 +53,7 @@ namespace PDF_Reader.Pages
                     }
                     if (IsIntersected(VATRec, word.Bounds))
                     {
-                        VAT += word.Text;
+                        VAT += word.Text.Trim();
                     }
                 }
             }
