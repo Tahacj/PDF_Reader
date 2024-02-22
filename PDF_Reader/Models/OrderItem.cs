@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace XPOS.Shared.Models
+namespace PDF_Reader.Models
 {
     public class OrderItem
     {

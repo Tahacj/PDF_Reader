@@ -1,4 +1,5 @@
-﻿using Syncfusion.Drawing;
+﻿using PDF_Reader.Models;
+using Syncfusion.Drawing;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Parsing;
@@ -8,11 +9,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using XPOS.Shared.Models;
 
 namespace PDF_Reader.Pages
 {
-    public class ClevelandProcessor : ABrandTrackProcessor , IBrandTrackProcessor
+    public class ClevelandProcessor : BaseProcessor , IBrandTrackProcessor
     {
         Order order1 = new();
         private string invoiceNumer = "";
@@ -51,32 +51,8 @@ namespace PDF_Reader.Pages
         //    this.shopid = shopid;
         //}
 
-        public async Task CreatStockIn(string fileName)
-        {
-            //try
-            //{
-            //    _mainDbContext.Database.BeginTransaction();
-            //    // add stock in to databse
-            //    var newOrder = await StockController.CreateOrder(_mainDbContext, order1, shopid, staffid);
-
-            //    // move the file to the other azure storage
-            //    //await TransferBlobAsync(fileName);
-
-
-            //    // delete the file from the first azure storage
-            //    //await DeleteBlobAsync(fileName);
-
-            //    await _mainDbContext.Database.CommitTransactionAsync();
-            //}
-            //catch (Exception ex)
-            //{
-            //    await _mainDbContext.Database.RollbackTransactionAsync();
-            //    //throw ex;
-            //    // show error massage on the screen
-            //}
-        }
-
-        public async Task ExtractData(Stream file, string fileName)
+        
+        public async Task<Order> ExtractData(Stream file, string fileName)
         {
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(file);
             int lastPageNum = loadedDocument.Pages.Count - 1;
@@ -289,6 +265,7 @@ namespace PDF_Reader.Pages
             //}
 
             //await CreatStockIn(fileName, staffid);
+            return order1;
         }
 
         //private async Task<OrderItem> GetOrderItem(string barcode, int qty)

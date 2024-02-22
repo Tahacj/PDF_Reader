@@ -1,4 +1,5 @@
-﻿using Syncfusion.Drawing;
+﻿using PDF_Reader.Pages;
+using Syncfusion.Drawing;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Parsing;
@@ -7,13 +8,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using XPOS.Shared.Models;
+using PDF_Reader.Models;
 
-namespace PDF_Reader.Pages
+namespace PDF_Reader.BrandtracProcessor
 {
-    public class CallawayProcessor : ABrandTrackProcessor , IBrandTrackProcessor
+    public class CallawayProcessor : BaseProcessor, IBrandTrackProcessor
     {
-        Order order1 = new();
         private string invoiceNumer = "";
         private string costumerId = "";
         private string billTo = "";
@@ -21,113 +21,83 @@ namespace PDF_Reader.Pages
         private string shipDate = "";
         private string order = "";
         private int totalQuantity = 0;
-        private List<string> quantities = new List<string>();
-        private List<string> products = new List<string>();
-        private List<string> barCodes = new List<string>();
-        private List<string> prices = new List<string>();
-        private List<string> description = new List<string>();
-        private List<string> discountAmount = new List<string>();
-        private List<string> VATAmount = new List<string>();
+        private List<ExtractedProduct> extractedOrders = new List<ExtractedProduct>();
         private string totalNetPrice = "";
-        static int height = 25;
+        static int height = 24;
         RectangleF invoiceBounds = new RectangleF(21, 219, 60, 10); //
         RectangleF costumerIdeBounds = new RectangleF(21, 244, 65, 10); //
         RectangleF billToBounds = new RectangleF(51, 125, 182, 80);
         RectangleF shipToBounds = new RectangleF(50, 30, 185, 83);
         RectangleF shipDateBounds = new RectangleF(171, 220, 50, 10);
         RectangleF orderBounds = new RectangleF(147, 244, 67, 10);
-        RectangleF qtyBounds = new RectangleF(330, 300, 25, height);
-        RectangleF descriptionBounds = new RectangleF(129, 300, 174, height);
-        RectangleF productsBounds = new RectangleF(42, 300, 85, height);
-        RectangleF priceBounds = new RectangleF(534, 300, 40, height);
-        RectangleF VATBounds = new RectangleF(300, 300, 39, height);
-        RectangleF discountAmountBounds = new RectangleF(435, 300, 25, height);
+        RectangleF qtyBounds = new RectangleF(330, 300, 25, 20);
+        RectangleF descriptionBounds = new RectangleF(129, 300, 174, 20);
+        RectangleF productsBounds = new RectangleF(42, 300, 85, 20);
+        RectangleF priceBounds = new RectangleF(390, 300, 40, 20);
+        RectangleF VATBounds = new RectangleF(534, 300, 39, 20);
+        RectangleF discountAmountBounds = new RectangleF(435, 300, 25, 20);
         RectangleF totalNetPriceBounds = new RectangleF(516, 648, 54, 12);
 
         List<RectangleF> qtyRectangles = new List<RectangleF>();
         List<RectangleF> priceRectangles = new List<RectangleF>();
         List<RectangleF> discountRectangles = new List<RectangleF>();
-        List<RectangleF> DescriptionsRectangles = new List<RectangleF>();
         List<RectangleF> productsRectangles = new List<RectangleF>();
         List<RectangleF> VATRectangles = new List<RectangleF>();
+        List<RectangleF> DescriptionsRectangles = new List<RectangleF>();
 
-
-        //private XCodesContext xCodesContext = new();
-        //private XCODESImports xCODESImports = new();
-        //private MainDbContext _mainDbContext = new();
         private string shopid;
+        private string groupID;
+
         //public CallawayProcessor(string shopid)
         //{
         //    this.shopid = shopid;
         //}
-        public async Task CreatStockIn(string fileName)
+
+        public async Task<Order> ExtractData(Stream file, string fileName)
         {
-            //try
-            //{
-            //    _mainDbContext.Database.BeginTransaction();
-            //    // add stock in to databse
-            //    var newOrder = await StockController.CreateOrder(_mainDbContext, order1, shopid, staffid);
-
-            //    // move the file to the other azure storage
-            //    //await TransferBlobAsync(fileName);
-
-
-            //    // delete the file from the first azure storage
-            //    //await DeleteBlobAsync(fileName);
-            //    await _mainDbContext.Database.CommitTransactionAsync();
-            //}
-            //catch (Exception ex)
-            //{
-            //    await _mainDbContext.Database.RollbackTransactionAsync();
-            //    // show error massage on the screen
-            //}
-
-        }
-
-        public async Task ExtractData(Stream file, string fileName)
-        {
+            Order order1 = new();
             PdfLoadedDocument loadedDocument = new PdfLoadedDocument(file);
             int lastPageNum = loadedDocument.Pages.Count - 1;
+            if (loadedDocument.Pages.Count == 0)
+                throw new Exception("file has no pages");
 
-
-            // Loop in the pages of the loaded PDF document
-            for (int i = 0; i < (loadedDocument.Pages.Count); i++)
+            for (int i = 0; i < loadedDocument.Pages.Count; i++)
             {
                 PdfPageBase page = loadedDocument.Pages[i];
-                //Console.WriteLine("width " + page.Size.Width + "\n hight " + page.Size.Height);
-                // Extract text from the first page with bounds
                 page.ExtractText(out TextLineCollection lineCollection);
                 PdfGraphics graphics = page.Graphics;
-
                 bool qty = false, prod = false, price = false, changed = false;
                 foreach (var txtLine in lineCollection.TextLine)
                 {
                     foreach (TextWord word in txtLine.WordCollection)
                     {
-                        if (IsIntersected(qtyBounds, word.Bounds))
+                        if (BrandTracUtils.IsIntersected(qtyBounds, word.Bounds))
                             if (word.Text.Length > 0 && float.TryParse(word.Text, out float qnty))
-                            {
                                 qty = true;
-                            }
-                        if (IsIntersected(productsBounds, word.Bounds))
+                        if (BrandTracUtils.IsIntersected(productsBounds, word.Bounds))
                             if (word.Text.Length > 0)
-                            {
                                 prod = true;
-                            }
-                        if (IsIntersected(priceBounds, word.Bounds) && float.TryParse(word.Text, out float prc))
+                        if (BrandTracUtils.IsIntersected(priceBounds, word.Bounds) && float.TryParse(word.Text, out float prc))
                             if (word.Text.Length > 0)
-                            {
                                 price = true;
-                            }
                     }
                     if (qty && prod && price)
                     {
+
+
+                        DrawRectangle(graphics, qtyBounds, Color.Orange);
+                        DrawRectangle(graphics, productsBounds, Color.Olive);
+                        DrawRectangle(graphics, descriptionBounds, Color.Black);
+                        DrawRectangle(graphics, priceBounds, Color.Purple);
+                        DrawRectangle(graphics, VATBounds, Color.Cyan);
+                        DrawRectangle(graphics, discountAmountBounds, Color.Black);
+
                         qtyRectangles.Add(qtyBounds);
                         priceRectangles.Add(priceBounds);
                         discountRectangles.Add(discountAmountBounds);
+                        productsRectangles.Add(productsBounds);
                         DescriptionsRectangles.Add(descriptionBounds);
                         VATRectangles.Add(VATBounds);
-                        productsRectangles.Add(productsBounds);
                         qtyBounds.Y += height;
                         priceBounds.Y += height;
                         discountAmountBounds.Y += height;
@@ -137,29 +107,16 @@ namespace PDF_Reader.Pages
 
                         qty = false; prod = false; price = false; changed = true;
                     }
-
                 }
-                DrawRectangle(graphics, invoiceBounds, Color.Red);
-                DrawRectangle(graphics, costumerIdeBounds, Color.Blue);
-                DrawRectangle(graphics, billToBounds, Color.Green);
-                DrawRectangle(graphics, shipToBounds, Color.Gold);
-                DrawRectangle(graphics, shipDateBounds, Color.GreenYellow);
-                DrawRectangle(graphics, orderBounds, Color.HotPink);
-                DrawRectangle(graphics, discountAmountBounds, Color.Black);
-                DrawRectangle(graphics, totalNetPriceBounds, Color.Black);
-                DrawRectangle(graphics, qtyBounds, Color.Orange);
-                DrawRectangle(graphics, productsBounds, Color.Olive);
-                DrawRectangle(graphics, descriptionBounds, Color.Black);
-                DrawRectangle(graphics, priceBounds, Color.Purple);
 
                 if (!changed)
                 {
                     qtyBounds = new RectangleF(0, 0, 0, 0);
                     productsBounds = new RectangleF(0, 0, 0, 0);
                     priceBounds = new RectangleF(0, 0, 0, 0);
+                    discountAmountBounds = new RectangleF(0, 0, 0, 0);
                     descriptionBounds = new RectangleF(0, 0, 0, 0);
                     VATBounds = new RectangleF(0, 0, 0, 0);
-                    discountAmountBounds = new RectangleF(0, 0, 0, 0);
                 }
 
                 foreach (var txtLine in lineCollection.TextLine)
@@ -168,84 +125,103 @@ namespace PDF_Reader.Pages
                     {
                         if (i == 0)
                         {
-                            if (IsIntersected(invoiceBounds, word.Bounds))
-                                invoiceNumer += word.Text;
-                            if (IsIntersected(costumerIdeBounds, word.Bounds))
-                                costumerId += word.Text;
-                            if (IsIntersected(billToBounds, word.Bounds))
-                                billTo += word.Text;
-                            if (IsIntersected(shipToBounds, word.Bounds))
-                                shipTo += word.Text;
-                            if (IsIntersected(shipDateBounds, word.Bounds))
-                                shipDate += word.Text;
-                            if (IsIntersected(orderBounds, word.Bounds))
-                                order += word.Text;
+                            if (BrandTracUtils.IsIntersected(invoiceBounds, word.Bounds))
+                                invoiceNumer += word.Text.Trim();
+                            if (BrandTracUtils.IsIntersected(costumerIdeBounds, word.Bounds))
+                                costumerId += word.Text.Trim();
+                            if (BrandTracUtils.IsIntersected(billToBounds, word.Bounds))
+                                billTo += word.Text.Trim();
+                            if (BrandTracUtils.IsIntersected(shipToBounds, word.Bounds))
+                                shipTo += word.Text.Trim();
+                            if (BrandTracUtils.IsIntersected(shipDateBounds, word.Bounds))
+                                shipDate += word.Text.Trim();
+                            if (BrandTracUtils.IsIntersected(orderBounds, word.Bounds))
+                                order += word.Text.Trim();
                         }
 
-                        if (IsIntersected(totalNetPriceBounds, word.Bounds) && i == lastPageNum)
-                            totalNetPrice += word.Text;
+                        if (BrandTracUtils.IsIntersected(totalNetPriceBounds, word.Bounds) && i == lastPageNum)
+                            totalNetPrice += word.Text.Trim();
                     }
                 }
 
+
+
+                DrawRectangle(graphics, invoiceBounds, Color.Red);
+                DrawRectangle(graphics, costumerIdeBounds, Color.Blue);
+                DrawRectangle(graphics, billToBounds, Color.Green);
+                DrawRectangle(graphics, shipToBounds, Color.Gold);
+                DrawRectangle(graphics, shipDateBounds, Color.GreenYellow);
+                DrawRectangle(graphics, orderBounds, Color.HotPink);
+                DrawRectangle(graphics, totalNetPriceBounds, Color.Black);
+
                 for (int r = 0; r < qtyRectangles.Count; r++)
                 {
-                    List<string> tempList = ExtractTextFromRectangle(lineCollection, qtyRectangles[r], priceRectangles[r], discountRectangles[r], productsRectangles[r], DescriptionsRectangles[r], VATRectangles[r]);
-                    quantities.Add(tempList[0]);
-                    prices.Add(tempList[1]);
-                    discountAmount.Add(tempList[2]);
-                    products.Add(tempList[3]);
-                    VATAmount.Add(tempList[5]);
-                    description.Add(tempList[4]);
-                    totalQuantity += int.Parse(tempList[0]);
+                    try
+                    {
+                        ExtractedProduct tempOrder = GetExtractProduct(lineCollection, qtyRectangles[r], priceRectangles[r], discountRectangles[r], productsRectangles[r], DescriptionsRectangles[r], VATRectangles[r]);
+                        extractedOrders.Add(tempOrder);
+                        totalQuantity += int.Parse(tempOrder.Qty);
+
+                    }
+                    catch (Exception e)
+                    {
+                        break;
+                        //throw e;
+                    }
                 }
 
 
 
                 float total = 0;
-                for (int j = 0; j < quantities.LongCount(); j++)
+                for (int j = 0; j < extractedOrders.Count; j++)
                 {
-                    if (!string.IsNullOrWhiteSpace(quantities[j]) && quantities[j] != "")
+                    try
                     {
                         total += (
-                           int.Parse(quantities[j].Trim())
-                           * float.Parse(prices[j].Trim())
-                           * (1 - (float.Parse(discountAmount[j].TrimEnd('%')) / 100)));
+                            int.Parse(extractedOrders[j].Qty)
+                           * float.Parse(extractedOrders[j].Price)
+                           * (1f - (float.Parse(extractedOrders[j].Discount) / 100)));
+                    }catch(Exception e)
+                    {
+                        break;
                     }
                 }
 
                 if (Pricecheck(total, totalNetPrice))
                 {
-                    order1.OrderType = OrderType.StockIn;
-                    order1.InvoiceNo = invoiceNumer;
-                    order1.Process = OrderProcess.Brandtrac;
-                    order1.Quantity = totalQuantity;
-                    order1.SupplierID = "c_callaway";
-                    for (int ds = 0; ds < quantities.Count; ds++)
-                    {
-                        //barCodes[ds] = GetSubstringBeforeDashOrSlash(barCodes[ds]);
-                        //var oi = await GetOrderItem(products[ds], int.Parse(quantities[ds]));
-                        //if (oi != null)
-                        //    order1.OrderItems.Add(oi);
-                        //else
-                        //{
-                        //    //TODO
-                        //}
-                    }
+                    //order1.CostPrice = (decimal)total;
+                    //order1.OrderType = OrderType.StockIn;
+                    //order1.InvoiceNo = invoiceNumer;
+                    //order1.Process = OrderProcess.Brandtrac;
+                    //order1.Quantity += totalQuantity;
+                    //order1.SupplierID = "c_callaway";
+                    //order1.ShopID = await FindShopId(costumerId);
+                    //groupID = await GetNonClassifiedGroupId(shopid);
+                    //if (groupID == null)
+                    //    throw new Exception("groupID not found or could not be created!");
+                    //for (int ds = 0; ds < extractedOrders.Count; ds++)
+                    //{
+                    //    var oi = await GetOrderItemByExtractedProduct(extractedOrders[ds], order1.SupplierID, shopid, groupID, true);
+                    //    if (oi != null)
+                    //        order1.OrderItems.Add(oi);
+                    //}
                 }
                 else
                 {
-                    // skip file and make a function to retrun the fualted file
+                    //throw new Exception($"validation failed for this Invoice Number: {invoiceNumer} the calculated total : {total} , the scanned total : {totalNetPrice}");
                     break;
                 }
             }
+
 
             using (FileStream outputFileStream = new FileStream($"{fileName}-modified.pdf", FileMode.Create))
             {
                 loadedDocument.Save(outputFileStream);
             }
+
+
             string data = "";
 
-            data = "-Invoice Number: " + invoiceNumer;
             data = "Invoice Number: " + invoiceNumer;
             data += "\n\nCostumer ID: " + costumerId;
             data += "\n\nBill To: " + billTo;
@@ -254,116 +230,21 @@ namespace PDF_Reader.Pages
             data += "\n\nOrder: " + order;
             data += "\n\nTotal Net Price: " + totalNetPrice;
             data += "\n\n------------\nQTY:";
-            foreach (var qty in quantities)
-                data += "\n\n" + qty;
+            foreach (var qty in extractedOrders)
+                data += "\n\n" + qty.Qty;
             data += "\n\n------------\nProducts:";
-            foreach (var p in products)
-                data += "\n\n" + p;
+            foreach (var p in extractedOrders)
+                data += "\n\n" + p.Name;
             data += "\n\n------------\nPrices:";
-            foreach (var p in prices)
-                data += "\n\n" + p;
-            data += "\n\n------------\n VAT Prices:";
-            foreach (var net in VATAmount)
-                data += "\n\n" + net;
-            data += "\n\n------------\n description:";
-            foreach (var net in description)
-                data += "\n\n" + net;
+            foreach (var p in extractedOrders)
+                data += "\n\n" + p.Price;
+            data += "\n\n------------\nDiscount:";
+            foreach (var discount in extractedOrders)
+                data += "\n\n-" + discount.Discount;
             Console.WriteLine(data);
-            //await CreatStockIn(fileName, staffid);
+
+            //order1.InvoiceUrl = await TransferBlobAsync(fileName);
+            return order1;
         }
-
-        //private async Task<OrderItem> GetOrderItem(string barcode, int qty)
-        //{
-        //    try
-        //    {
-        //        var orderItem = await GetOrderItemByBarcode(barcode);
-        //        if (orderItem is null)
-        //        {
-        //            var result = await xCODESImports.Import("", shopid, barcode, null);
-        //            if (result == null)
-        //                throw new Exception("Not Found");
-
-
-        //            //Search for PriceBreaks by barcode after import the results from XCode
-        //            orderItem = await GetOrderItemByBarcode(barcode);
-        //            if (orderItem is null)
-        //                throw new Exception("Price breaks missing");
-        //        }
-
-        //        if (orderItem != null)
-        //        {
-        //            orderItem.Quantity = qty;
-        //            orderItem.OrderQuantity = qty;
-        //            return orderItem;
-        //        }
-        //        return null;
-
-        //    }catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
-        //private async Task<OrderItem> GetOrderItemByBarcode(string? search)
-        //{
-        //    var catShops = await _mainDbContext.ProductCatalogueShops.Where(x => x.ShopID == shopid).Select(x => new { x.ProductCatalogue_ID, x.SalesPrice_ShopID, x.CostPrice_ShopID }).ToArrayAsync();
-
-        //    foreach (var catShop in catShops)
-        //    {
-        //        var saleShopId = catShop.SalesPrice_ShopID ?? shopid;
-        //        var costShopId = catShop.CostPrice_ShopID ?? shopid;
-        //        //int.TryParse(search, out int barcode);
-        //        //var priceBreakIds = await (
-        //        //    from pb in _mainDbContext.ProductVariantPriceBreaks
-        //        //    from b in _mainDbContext.ProductVariantPriceBreakBarcodes.Where(x => x.ProductVariantPriceBreak_ID == pb.ID)
-        //        //    where pb.ShopID == saleShopId && (b.Barcode == search || (barcode > 0 && pb.SalesLabelBarcode == barcode))
-        //        //    select pb.ID).ToListAsync();
-
-        //        //if (priceBreakIds.Any())
-        //        //{
-        //        var oi = await (from pb in _mainDbContext.ProductVariantPriceBreaks
-        //                        from pv in _mainDbContext.ProductVariants.Where(x => x.ID == pb.ProductVariant_ID)
-        //                        from pvc in _mainDbContext.ProductVariantCostPrices.Where(x => x.ProductVariant_ID == pv.ID && x.StockUnits == pb.StockUnits)
-        //                        from p in _mainDbContext.Products.Where(x => x.ID == pv.Product_ID)
-        //                        from pm in _mainDbContext.ProductMultisites.Where(x => x.Product_ID == p.ID)
-        //                        where p.ProductCatalogue_ID == catShop.ProductCatalogue_ID && pb.ShopID == saleShopId
-        //                        && pm.ShopID == shopid && pv.SKU == search
-        //                        select new OrderItem
-        //                        {
-        //                            ProductVariantPriceBreak_ID = pb.ID,
-        //                            CostPrice = pvc.CostPrice,
-        //                            ProductVariant_ID = pv.ID,
-        //                            //ImageURL = string.Empty,
-        //                            SalesPrice = pb.SalesPrice,
-        //                            StockUnit = pb.StockUnits,
-        //                            VATCode = pb.VATCode,
-        //                        }).FirstOrDefaultAsync();
-        //        if (oi != null)
-        //            return oi;
-        //    }
-        //    //}
-
-        //    return null;
-        //}
-
-        //public async Task<bool?> IsValid(string productid)
-        //{
-
-        //    var barcodeProductId = xCodesContext.Barcodes.FirstOrDefault(x => x.Barcode == productid)?.ProductID ??
-        //        xCodesContext.PriceBreaks.FirstOrDefault(x => x.Barcode == productid)?.ProductID;
-        //    if (string.IsNullOrEmpty(barcodeProductId))
-        //        return null;
-
-        //    var productChild = await xCodesContext.Products.FirstOrDefaultAsync(p => p.ProductID == barcodeProductId && p.CurrentProduct == 1);
-        //    if (productChild != null)
-        //    {
-        //        var productInXcodes = await xCodesContext.Products.FirstOrDefaultAsync(p => p.ProductID == productChild.StyleNumber && p.CurrentProduct == 1 && p.MatrixType == 2);
-        //        if (productInXcodes == null)
-        //            return null;
-        //    }
-
-        //    return true;
-
-        //}
-
     }
 }

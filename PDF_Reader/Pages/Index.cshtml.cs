@@ -11,7 +11,8 @@ using System;
 using System.IO;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Interactive;
-using XPOS.Shared.Models;
+using PDF_Reader.Models;
+using PDF_Reader.BrandtracProcessor;
 
 
 namespace PDF_Reader.Pages
@@ -150,6 +151,10 @@ namespace PDF_Reader.Pages
             {
                 ClevelandProcessor processor = new ClevelandProcessor();
                 await processor.ExtractData(file, filename);
+            }else if(brandName == "UAOld")
+            {
+                UnderAromorOldProcessor processor = new UnderAromorOldProcessor();
+                await processor.ExtractData(file, filename);
             }
             else if (brandName == "other")
             {
@@ -192,7 +197,6 @@ namespace PDF_Reader.Pages
 
 
         }
-
         public async void Puma(PdfLoadedDocument loadedDocument, int i)
         {
 

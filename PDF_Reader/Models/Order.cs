@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XPOS.Shared.Models
+namespace PDF_Reader.Models
 {
     public class Order
     {

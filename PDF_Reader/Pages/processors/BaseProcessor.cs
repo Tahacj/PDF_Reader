@@ -2,12 +2,13 @@
 using Syncfusion.Pdf;
 using System.Collections.Generic;
 using System;
-using XPOS.Shared.Models;
 using Syncfusion.Pdf.Graphics;
+using static PDF_Reader.Pages.IndexModel;
+using PDF_Reader.Models;
 
 namespace PDF_Reader.Pages
 {
-    public abstract class ABrandTrackProcessor
+    public abstract class BaseProcessor
     {
         internal bool IsIntersected(RectangleF rect1, RectangleF rect2)
         {
@@ -17,6 +18,37 @@ namespace PDF_Reader.Pages
             }
 
             return false;
+        }
+
+        public ExtractedProduct GetExtractProduct(TextLineCollection page, RectangleF qtyRec, RectangleF priceRec, RectangleF? discountRec, RectangleF productRec, RectangleF descriptionRec, RectangleF VATRec)
+        {
+            ExtractedProduct order = new ExtractedProduct();
+            try
+            {
+                foreach (var txtLine in page.TextLine)
+                {
+                    foreach (TextWord word in txtLine.WordCollection)
+                    {
+                        if (BrandTracUtils.IsIntersected(qtyRec, word.Bounds))
+                            order.Qty += word.Text.Trim();
+                        if (BrandTracUtils.IsIntersected(priceRec, word.Bounds))
+                            order.Price += word.Text.Trim();
+                        if (discountRec != null && BrandTracUtils.IsIntersected(discountRec.Value, word.Bounds))
+                            order.Discount += word.Text.Trim().TrimEnd('%');
+                        if (BrandTracUtils.IsIntersected(productRec, word.Bounds))
+                            order.Name += word.Text.Trim();
+                        if (BrandTracUtils.IsIntersected(descriptionRec, word.Bounds))
+                            order.Description += word.Text;
+                        if (BrandTracUtils.IsIntersected(VATRec, word.Bounds))
+                            order.Vat += word.Text.Trim();
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
+            return order;
         }
 
         public List<string> ExtractTextFromRectangle(TextLineCollection page, RectangleF qtyRec, RectangleF priceRec, RectangleF discountRec, RectangleF productRec, RectangleF descriptionRec, RectangleF VATRec)
@@ -90,11 +122,18 @@ namespace PDF_Reader.Pages
 
         public bool Pricecheck(float calculated, string total)
         {
-            if (Math.Abs(float.Parse(total.Trim()) - calculated) < 0.0001)
+            try
             {
-                return true;
-            }
-            else
+                if (Math.Abs(float.Parse(total.Trim()) - calculated) < 0.01)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }catch (Exception ex)
             {
                 return false;
             }
