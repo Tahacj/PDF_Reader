@@ -13,6 +13,7 @@ using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Interactive;
 using PDF_Reader.Models;
 using PDF_Reader.BrandtracProcessor;
+using System.Diagnostics;
 
 
 namespace PDF_Reader.Pages
@@ -100,7 +101,7 @@ namespace PDF_Reader.Pages
             if (brandName == "UA")
             {
                 UnderArmorProcessor processor = new UnderArmorProcessor();
-                await processor.ExtractData(file , filename);
+                await processor.ExtractData(file, filename);
             }
             else if (brandName == "Callaway")
             {
@@ -135,7 +136,7 @@ namespace PDF_Reader.Pages
             else if (brandName == "CobraPuma")
             {
                 CobraPumaProcessor processor = new CobraPumaProcessor();
-                await processor.ExtractData(file , filename);
+                await processor.ExtractData(file, filename);
             }
             else if (brandName == "Titleist")
             {
@@ -151,9 +152,15 @@ namespace PDF_Reader.Pages
             {
                 ClevelandProcessor processor = new ClevelandProcessor();
                 await processor.ExtractData(file, filename);
-            }else if(brandName == "UAOld")
+            }
+            else if (brandName == "UAOld")
             {
                 UnderAromorOldProcessor processor = new UnderAromorOldProcessor();
+                await processor.ExtractData(file, filename);
+            }
+            else if (brandName == "Adidas")
+            {
+                AdidasProcessor processor = new AdidasProcessor();
                 await processor.ExtractData(file, filename);
             }
             else if (brandName == "other")
@@ -692,8 +699,8 @@ namespace PDF_Reader.Pages
             string name = "";
             float stratPosX = lineCollection.TextLine[9].Bounds.Location.X;
             float stratPosY = lineCollection.TextLine[9].Bounds.Location.Y;
-                          
-                Console.WriteLine("width " + page.Size.Width + "\n hight " + page.Size.Height);
+
+            Console.WriteLine("width " + page.Size.Width + "\n hight " + page.Size.Height);
             foreach (var txtLine in lineCollection.TextLine)
             {
                 //DrawRectangle(graphics, txtLine.Bounds, Color.Orange);
@@ -746,6 +753,9 @@ namespace PDF_Reader.Pages
                     // look for Cleveland
                     if (IsIntersected(new RectangleF(34, 65, 45, 10), word.Bounds))
                         if (word.Text.Contains("Srixon")) return "ClevelandGolf";
+                    // look for Adidas
+                    if (IsIntersected(new RectangleF(678, 87, 33, 13), word.Bounds))
+                        if (word.Text.Contains("adidas")) return "Adidas";
                     // look for Titleist
                     if (IsIntersected(new RectangleF(42, 795, 93, 10), word.Bounds))
                     {
