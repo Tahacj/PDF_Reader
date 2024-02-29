@@ -34,7 +34,7 @@ namespace PDF_Reader.Pages
                         if (BrandTracUtils.IsIntersected(priceRec, word.Bounds))
                             order.Price += word.Text.Trim();
                         if (discountRec != null && BrandTracUtils.IsIntersected(discountRec.Value, word.Bounds))
-                            order.Discount += word.Text.Trim().TrimEnd('%');
+                            order.Discount += word.Text.Trim().TrimStart('-').TrimEnd('%');
                         if (BrandTracUtils.IsIntersected(productRec, word.Bounds))
                             order.Name += word.Text.Trim();
                         if (BrandTracUtils.IsIntersected(descriptionRec, word.Bounds))

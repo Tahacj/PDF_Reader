@@ -163,8 +163,31 @@ namespace PDF_Reader.Pages
                 AdidasProcessor processor = new AdidasProcessor();
                 await processor.ExtractData(file, filename);
             }
+            else if (brandName == "Ping")
+            {
+                PingProcessor processor = new PingProcessor();
+                await processor.ExtractData(file, filename);
+            }
+            else if (brandName == "Amer")
+            {
+                AmerProcessor processor = new AmerProcessor();
+                await processor.ExtractData(file, filename);
+            }
+            else if (brandName == "Yumax")
+            {
+                YumaxProcessor processor = new YumaxProcessor();
+                await processor.ExtractData(file, filename);
+            }
+            else if (brandName == "MizunoNew")
+            {
+                MizunoNewProcessor processor = new MizunoNewProcessor();
+                await processor.ExtractData(file, filename);
+            }
             else if (brandName == "other")
             {
+                //MizunoNewProcessor processor = new MizunoNewProcessor();
+                //await processor.ExtractData(file, filename);
+
                 //transfate the file to a file to get check manualy later
                 //await TransferBlobAsync(fileName);
             }
@@ -740,6 +763,30 @@ namespace PDF_Reader.Pages
                     {
                         name += word.Text;
                         if (name.Contains("UNDER ARMOUR")) return "UA";
+                    }
+                    // look for PING
+                    if (IsIntersected(new RectangleF(83, 50, 60, 8), word.Bounds))
+                    {
+                        name += word.Text;
+                        if (name.Contains("Corringham Road")) return "Ping";
+                    }
+                    // look for Amer Wilson
+                    if (IsIntersected(new RectangleF(205, 95, 55, 13), word.Bounds))
+                    {
+                        name += word.Text;
+                        if (name.Contains("Wilson Golf")) return "Amer";
+                    }
+                    // look for Yumax
+                    if (IsIntersected(new RectangleF(400, 57, 77, 10), word.Bounds))
+                    {
+                        name += word.Text;
+                        if (name.Contains("Alton Golf Club")) return "Yumax";
+                    }
+                    // look for Mizuno New
+                    if (IsIntersected(new RectangleF(150, 35, 100, 15), word.Bounds))
+                    {
+                        name += word.Text;
+                        if (name.Contains("Mizuno Corporation")) return "MizunoNew";
                     }
                     // look for TaylorMade
                     if (IsIntersected(new RectangleF(55, 782, 40, 10), word.Bounds))
