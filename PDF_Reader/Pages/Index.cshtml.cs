@@ -183,9 +183,14 @@ namespace PDF_Reader.Pages
                 MizunoNewProcessor processor = new MizunoNewProcessor();
                 await processor.ExtractData(file, filename);
             }
+            else if (brandName == "Glenmuir")
+            {
+                GlenmuirProcessor processor = new GlenmuirProcessor();
+                await processor.ExtractData(file, filename);
+            }
             else if (brandName == "other")
             {
-                //MizunoNewProcessor processor = new MizunoNewProcessor();
+                //GlenmuirProcessor processor = new GlenmuirProcessor();
                 //await processor.ExtractData(file, filename);
 
                 //transfate the file to a file to get check manualy later
@@ -787,6 +792,12 @@ namespace PDF_Reader.Pages
                     {
                         name += word.Text;
                         if (name.Contains("Mizuno Corporation")) return "MizunoNew";
+                    }
+                    // look for Glenmuir
+                    if (IsIntersected(new RectangleF(22, 68, 100, 15), word.Bounds))
+                    {
+                        name += word.Text;
+                        if (name.Contains("Glenmuir Limited")) return "Glenmuir";
                     }
                     // look for TaylorMade
                     if (IsIntersected(new RectangleF(55, 782, 40, 10), word.Bounds))
