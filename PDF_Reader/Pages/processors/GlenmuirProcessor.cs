@@ -14,6 +14,7 @@ namespace PDF_Reader.Pages
 {
     public class GlenmuirProcessor : BaseProcessor, IBrandTrackProcessor
     {
+
         Order order1 = new();
         private List<ExtractedProduct> extractedOrders = new List<ExtractedProduct>();
         private string invoiceNumer = "";
